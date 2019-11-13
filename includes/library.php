@@ -8,12 +8,18 @@ function & dbconnect(){
 
 
     //create connection dsn
-   $dsn = "mysql:host=loki.trentu.ca;port=3306;dbname=apollosoftware;charset=utf8";
+   $dsn = "mysql:host=loki.trentu.ca;dbname=apollosoftware;charset=utf8";
 
+    //set options array for connection
+    $options = [
+        PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES   => false,
+    ];
 
     //make database object
     try {
-        $pdo = new PDO($dsn, "apollosoftware", "cois4000Y");
+        $pdo = new PDO($dsn, "\apollosoftware", "cois4000Y", $options);
     } catch (\PDOException $e) {
          throw new \PDOException($e->getMessage(), (int)$e->getCode());
     }
