@@ -4,7 +4,7 @@ session_start();
  
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-  header("location: welcome.php");
+  header("location: index.php");
   exit;
 }
  
@@ -117,6 +117,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
+</head>
 <body>
     <div class="limiter">
     <div class="container-login100" style="background-image: url('images/Login_background.jpg');">
