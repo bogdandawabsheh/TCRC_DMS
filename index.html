@@ -5,7 +5,7 @@ session_start();
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
-    exit;
+    exit;`
 }
 ?> -->
 <!DOCTYPE html>
@@ -235,7 +235,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/forms/general.html" class="nav-link">
+                <a href="studentform.php" class="nav-link">
                   <i class="fas fa-pen nav-icon"></i>
                   <p>Student Form</p>
                 </a>
