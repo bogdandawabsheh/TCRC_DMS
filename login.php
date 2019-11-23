@@ -64,7 +64,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             $_SESSION["id"] = $id;
                             $_SESSION["username"] = $username;
 
-                            // Redirect user to google.com
+                            // Redirect user to index1.php
                             header("Location: index1.php");
                         } else{
                             // Display an error message if password is not valid
@@ -142,7 +142,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
              <center>  <input type="submit" class="btn btn-primary" value="Login"> </center>
             </div>
             <br>
-            <h5>Don't have an account? <a href="register.php">Sign up now</a>.</h5>
+            <h5>Don't have an account? <a href="register.php" style= "color:white">Sign up now</a>.</h5>
         </form>
     </div>
 </body>
