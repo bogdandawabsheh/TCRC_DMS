@@ -4,7 +4,7 @@ session_start();
 
 $orgName =  $contact = $address = $phone = $email = $website = $logoConsent = $orgPurpose = "";
 $orgYear = $orgEmployee = $appoved =  $theme = $projectScale = $projectTitle = $projectDescription = $projectTask= "";
-$projectStartDate = $projectEndDate = $researchEthics = $projectImplementation = $screeningReq = "";
+$projectStartDate = $projectEndDate = $researchEthics1 = $researchEthics2 = $researchEthics3 = $projectImplementation = $screeningReq1 = $screeningReq2 = "";
 $additionalSkills = $resourcesNeeded = $fundingNeeded =	$additionalNotes = $photoLink= "";
 
 
@@ -83,6 +83,14 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   } else {
     //variable declaration
     $logoConsent = trim($_POST["logoConsent"]);
+
+    if($logoConsent == 'Yes'){
+      $logoConsent = 1;
+    }
+      else {
+        $logoConsent = 0;
+      }
+
   }
 
 
@@ -357,7 +365,14 @@ empty(trim($_POST["otherProjectImplementation"]))){
   else {
   //variable declaration
   $q1 = $_POST['q1'];
-  $q1a = $_POST['q1'];
+
+
+if($q1 == 'Research invovles human subjects'){
+  $researchEthics1 = 1;
+}
+  else {
+    $researchEthics1 = 0;
+  }
 
 }
 
@@ -370,7 +385,13 @@ if(empty(trim($_POST["q2"]))){
 else {
 //variable declaration
 $q2 = $_POST['q2'];
-$q2a = $_POST['q2'];
+
+if($q2 == 'Yes, I want access to the raw data at the end of the project'){
+  $researchEthics2 = 1;
+}
+  else {
+    $researchEthics2 = 0;
+  }
 
 }
 
@@ -382,15 +403,16 @@ if(empty(trim($_POST["q3"]))){
 else {
 //variable declaration
 $q3 = $_POST['q3'];
-$q3a = $_POST['q3'];
+
+if($q3 == 'Yes, lead had policies about research ethics approval.'){
+  $researchEthics3 = 1;
+}
+  else {
+    $researchEthics3 = 0;
+  }
+
 
 }
-
-$researchEthics = $q1a." ".$q2a." ".$q3a;
-
-
-
-
 
 
 
@@ -403,8 +425,16 @@ $researchEthics = $q1a." ".$q2a." ".$q3a;
   else {
   //variable declaration
   $screeningQ1 = $_POST['screeningQ1'];
-  $screeningQ1IfYes = $_POST['screeningQ1Yes'];
+
+  if($screeningQ1 == 'Yes, the students require specific training.'){
+    $screeningReq1 = 1;
+  }
+    else {
+      $screeningReq1 = 0;
+    }
+
 }
+
 
   if (empty(trim($_POST["screeningQ2"]))) {
     $screeningReq_err2 = "Please choose an option!";
@@ -412,11 +442,16 @@ $researchEthics = $q1a." ".$q2a." ".$q3a;
   else {
   //variable declaration
   $screeningQ2 = $_POST['screeningQ2'];
-  $screeningQ2IfYes = $_POST['screeningQ2IfYes'];
+
+  if($screeningQ2 == 'Yes, the students will be conducting research on site, or working with valuable equipment.'){
+    $screeningReq2 = 1;
+  }
+    else {
+      $screeningReq2 = 0;
+    }
+
+
 }
-
-$screeningReq = $screeningQ1." ".$screeningQ1IfYes." ".$screeningQ2.$screeningQ2IfYes;
-
 
 
 
@@ -477,13 +512,13 @@ include 'includes/library.php';
     $sql="INSERT into projectForm (orgName, contact, address, phone, email,
       website, 	logoConsent, orgPurpose, orgYear, orgEmployee, theme,
   	  projectScale, projectTitle, projectDescription, projectTask, 	projectStartDate,
-    	projectEndDate, researchEthics, projectImplementation, 	screeningReq, additionalSkills,
+    	projectEndDate, researchEthics1, researchEthics2, researchEthics3, projectImplementation, 	screeningReq1, screeningReq2, additionalSkills,
     	resourcesNeeded, fundingNeeded,	additionalNotes, photoLink) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $stmt= $pdo->prepare($sql);
     $stmt ->execute([$orgName, $contact, $address, $phone, $email,
       $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $theme,
   	  $projectScale, $projectTitle, $projectDescription, $projectTask, 	$projectStartDate,
-    	$projectEndDate, $researchEthics, $projectImplementation, $screeningReq, $additionalSkills,
+    	$projectEndDate, $researchEthics1, $researchEthics2, $researchEthics3, $projectImplementation, $screeningReq1, $screeningReq2, $additionalSkills,
     	$resourcesNeeded, $fundingNeeded,	$additionalNotes, $photoLink]);
 
 
