@@ -35,8 +35,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, username, password FROM users WHERE username = ?";
-
+        $sql = "SELECT id, uname, password FROM users WHERE uname = ?";
+        $stmt = "";
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
             mysqli_stmt_bind_param($stmt, "s", $param_username);
@@ -123,8 +123,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <div class="container-login100" style="background-image: url('images/Login_background.jpg');">
 			<div class="wrap-login100">
         <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-            <div class="wrap-input100 validate-input" data-validate = "Enter username" placeholder="Username" <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
-            <center><img src= "images/trent-community-research-centre LOGO.png" height = 80% width = 80%></center>
+            <div class="wrap-input100 validate-input" data-validate = "Enter username" placeholder="Username" <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>>
+            <center><img src= "images/trent-community-research-centre LOGO.png" height = '80%' width = '80%'></center>
                 <br>
               <center>  <h1> LOGIN </h1> </center>
               <br>
@@ -132,7 +132,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 <input type="text" name="username" class="form-control" value="<?php echo $username; ?>">
                 <span class="help-block"><?php echo $username_err; ?></span>
             </div>
-            <div class="login100-form validate-form" <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
+            <div class="login100-form validate-form" <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>>
                 <label>Password</label>
                 <input type="password" name="password" class="form-control">
                 <span class="help-block"><?php echo $password_err; ?></span>
@@ -145,5 +145,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <h5>Don't have an account? <a href="register.php" style= "color:white">Sign up now</a>.</h5>
         </form>
     </div>
+  </div>
+</div>
 </body>
 </html>
