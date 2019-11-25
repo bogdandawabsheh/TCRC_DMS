@@ -471,7 +471,7 @@ include 'includes/library.php';
 
 
   //add account details to database
-    $sql="INSERT into projectform (orgName, contact, address, phone, email,
+    $sql="INSERT into projectForm (orgName, contact, address, phone, email,
       website, 	logoConsent, orgPurpose, orgYear, orgEmployee, theme,
   	  projectScale, projectTitle, projectDescription, projectTask, 	projectStartDate,
     	projectEndDate, researchEthics, projectImplementation, 	screeningReq, additionalSkills,
