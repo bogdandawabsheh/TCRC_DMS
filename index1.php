@@ -1,13 +1,13 @@
 <?php
 // Initialize the session
 session_start();
- 
+
 // Check if the user is logged in, if not then redirect him to login page
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     header("location: login.php");
     exit;
 }
-?> 
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -121,7 +121,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
               <img src="dist/img/user6-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
-                  Nikhil Pai Ganesh 
+                  Nikhil Pai Ganesh
                   <span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>
                 </h3>
                 <p class="text-sm">The subject goes here</p>
@@ -189,7 +189,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
         <div class="info">
           <a href="#" class="d-block"> Logged in as <?php echo htmlspecialchars($_SESSION["username"]); ?></a>
           <a href="logout.php" class="d-block" style= "color: red"> Log Out </a>
-                  
+
         </div>
       </div>
 
@@ -257,7 +257,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             </ul>
           </li>
           <li class="nav-item">
-            <a href="#" class="nav-link">
+            <a href="pages/tables/main.php" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Tables
@@ -362,7 +362,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                   <p>Lockscreen</p>
                 </a>
               </li>
-              
+
             </ul>
           </li>
           <li class="nav-header">MISCELLANEOUS</li>
@@ -373,7 +373,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
             </a>
           </li>
         </ul>
-          
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
@@ -492,14 +492,14 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                    Morris chart - Sales -->
                   <!-- <div class="chart tab-pane active" id="revenue-chart"
                        style="position: relative; height: 300px;">
-                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>                         
+                      <canvas id="revenue-chart-canvas" height="300" style="height: 300px;"></canvas>
                    </div>
                   <div class="chart tab-pane" id="sales-chart" style="position: relative; height: 300px;">
-                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>                         
-                  </div>  
+                    <canvas id="sales-chart-canvas" height="300" style="height: 300px;"></canvas>
+                  </div>
                 </div>
               </div>/.card-body -->
-            <!-- </div> 
+            <!-- </div>
              -->
 
             <!-- DIRECT CHAT -->
