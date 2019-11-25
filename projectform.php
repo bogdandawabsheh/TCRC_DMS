@@ -9,9 +9,12 @@ $additionalSkills = $resourcesNeeded = $fundingNeeded =	$additionalNotes = $phot
 
 
 $orgName_err =  $contact_err = $address_err = $phone_err = $email_err = $website_err = $logoConsent_err = $orgPurpose_err = "";
-$orgYear_err = $orgEmployee_err = $appoved_err =  $theme_err = $projectScale_err = $projectTitle_err = $projectDescription_err = $projectTask_err= "";
-$projectStartDate_err = $projectEndDate_err = $researchEthics_err = $projectImplementation_err = $screeningReq_err = "";
+$orgYear_err = $orgEmployee_err = $appoved_err =  $theme_err = $projectScale_err = $projectTitle_err = $projectDescription_err1 = $projectTask_err= "";
+$projectStartDate_err = $projectEndDate_err = $researchEthics_err1 =$researchEthics_err2 = $researchEthics_err3 = $projectImplementation_err = $screeningReq_err1 = $screeningReq_err2 = "";
 $additionalSkills_err = $resourcesNeeded_err = $fundingNeeded_err =	$additionalNotes_err = $photoLink_err= "";
+
+
+$projectDescription_err2 = $projectDescription_err3 = $projectDescription_err4 = $projectDescription_err5 = "";
 
 require_once "config.php";
 
