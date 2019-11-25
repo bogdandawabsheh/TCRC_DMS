@@ -178,9 +178,9 @@ empty(trim($_POST["environmentalTheme"])) &&empty(trim($_POST["socialTheme"]))
 
   $projectScaleA = array();
   if(empty(trim($_POST["scale1"])) && empty(trim($_POST["scale2"])) &&
-empty(trim($_POST["scale3"])) &&empty(trim($_POST["scale4"])) &&
-empty(trim($_POST["scale5"])) &&empty(trim($_POST["scale6"])) &&
-empty(trim($_POST["scale7"])) &&empty(trim($_POST["projectScale"]))){
+empty(trim($_POST["scale3"])) && empty(trim($_POST["scale4"])) &&
+empty(trim($_POST["scale5"])) && empty(trim($_POST["scale6"])) &&
+empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
     //error declaration
     $projectScale_err = "Please select at least 1 Project Scale.";
   } else {
@@ -322,8 +322,8 @@ empty(trim($_POST["projectTask3"]))){
 
   $projectImplementationA = array();
   if(empty(trim($_POST["projectImplementation1"])) && empty(trim($_POST["projectImplementation2"])) &&
-empty(trim($_POST["projectImplementation3"])) &&empty(trim($_POST["projectImplementation4"])) &&
-empty(trim($_POST["projectImplementation5"])) &&empty(trim($_POST["projectImplementation6"])) &&
+empty(trim($_POST["projectImplementation3"])) && empty(trim($_POST["projectImplementation4"])) &&
+empty(trim($_POST["projectImplementation5"])) && empty(trim($_POST["projectImplementation6"])) &&
 empty(trim($_POST["otherProjectImplementation"]))){
     //error declaration
     $projectImplementation_err = "Please choose at least 1 option for Project Implementation.";
@@ -513,7 +513,7 @@ include 'includes/library.php';
       website, 	logoConsent, orgPurpose, orgYear, orgEmployee, theme,
   	  projectScale, projectTitle, projectDescription, projectTask, 	projectStartDate,
     	projectEndDate, researchEthics1, researchEthics2, researchEthics3, projectImplementation, 	screeningReq1, screeningReq2, additionalSkills,
-    	resourcesNeeded, fundingNeeded,	additionalNotes, photoLink) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    	resourcesNeeded, fundingNeeded,	additionalNotes, photoLink) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $stmt= $pdo->prepare($sql);
     $stmt ->execute([$orgName, $contact, $address, $phone, $email,
       $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $theme,
