@@ -7,12 +7,12 @@ $counter = 0;
 
 require_once "../../config.php";
 //Retrieve the list of currently approved but not yet begun projects
-$sql = "SELECT * FROM contact";
+$sql = "SELECT * FROM department";
 
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
-    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13]);
+    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3]);
     $counter++;
   }
 }
@@ -24,7 +24,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Data Tables</title>
+  <title>Contacts Data Table</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -388,7 +388,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Data Tables</h1>
+            <h1>Contact Datatable</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -406,56 +406,46 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Data Tables</h3>
+              <h3 class="card-title">Contacts Data Table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>Data table name</th>
-                  <th>Link</th>
+                  <th>id</th>
+                  <th>departmentName</th>
+                  <th>institutionName</th>
+                  <th>NLA</th>
                 </tr>
                 </thead>
                 <tbody>
+                  <?php
+                  for($i = 0; $i < $counter; $i++){
+                  ?>
                   <tr>
-                    <td>Contact</td>
-                    <td> <button type="button"onclick="location.href='contact.php'"> > </button> </td>
+                  <?php
+                    echo "<td>{$projectArray[$i]['0']}</td>";
+                    echo "<td>{$projectArray[$i]['1']}</td>";
+                    echo "<td>{$projectArray[$i]['2']}</td>";
+                    echo "<td>{$projectArray[$i]['3']}</td>";
+                    ?>
                   </tr>
-                    <tr>
-                      <td>Project</td>
-                      <td><button type="button" onclick="location.href='project.php'"> > </button></td>
-                    </tr>
-
-                      <tr>
-                        <td>Host Organization</td>
-                        <td><button type="button" onclick="location.href='hostOrganization.php'"> > </button></td>
-                      </tr>
-
-                        <tr>
-                          <td>Host Address</td>
-                          <td><button type="button" onclick="location.href='hostAddress.php'"> > </button></td>
-                        </tr>
-
-                          <tr>
-                            <td>Faculty</td>
-                            <td><button type="button" onclick="location.href='faculty.php'"> > </button></td>
-                          </tr>
-
-                            <tr>
-                              <td>Department</td>
-                              <td><button type="button" onclick="location.href='department.php'"> > </button></td>
-                            </tr>
-
-                              </tbody>
+                  <?php
+                  }
+                  ?>
+                </tbody>
                 <tfoot>
                 <tr>
-                  <th>Data table name</th>
-                  <th>Link</th>
+                  <th>id</th>
+                  <th>departmentName</th>
+                  <th>institutionName</th>
+                  <th>NLA</th>
                 </tr>
                 </tfoot>
               </table>
             </div>
+             <button type="button">Export as CSV</button>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
@@ -488,7 +478,9 @@ if($result = $link -> query($sql)){
 <!-- page script -->
 <script>
   $(function () {
-    $("#example1").DataTable();
+    $("#example1").DataTable({
+      "scrollX": true
+    });
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,

@@ -7,12 +7,12 @@ $counter = 0;
 
 require_once "../../config.php";
 //Retrieve the list of currently approved but not yet begun projects
-$sql = "SELECT * FROM contact";
+$sql = "SELECT * FROM hostOrganization";
 
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
-    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13]);
+    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8]);
     $counter++;
   }
 }
@@ -24,7 +24,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Data Tables</title>
+  <title>Contacts Data Table</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -86,7 +86,7 @@ if($result = $link -> query($sql)){
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Bogdan Dawabsheh
@@ -102,7 +102,7 @@ if($result = $link -> query($sql)){
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="../../dist/img/user8-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Denzel Awuah
@@ -118,7 +118,7 @@ if($result = $link -> query($sql)){
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="dist/img/user6-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
+              <img src="../../dist/img/user6-128x128.jpg" alt="User Avatar" class="img-size-50 img-circle mr-3">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Nikhil Pai Ganesh
@@ -174,7 +174,7 @@ if($result = $link -> query($sql)){
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index1.php" class="brand-link">
-     <center> <img src="images/TrentCommResCentre.jpg" alt="TCRC"
+     <center> <img src="../../images/TrentCommResCentre.jpg" alt="TCRC"
            style="opacity: .8" width = "90%" height = "70%"> </center>
       <!-- <span class="brand-text font-weight-light">TCRC</span> -->
     </a>
@@ -388,7 +388,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Data Tables</h1>
+            <h1>Contact Datatable</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -406,56 +406,61 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Data Tables</h3>
+              <h3 class="card-title">Contacts Data Table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>Data table name</th>
-                  <th>Link</th>
+                  <th>id</th>
+                  <th>orgName</th>
+                  <th>orgType</th>
+                  <th>hostClass</th>
+                  <th>contactName</th>
+                  <th>notes</th>
+                  <th>NLA</th>
+                  <th>departmentID</th>
+                  <th>WSIB</th>
                 </tr>
                 </thead>
                 <tbody>
+                  <?php
+                  for($i = 0; $i < $counter; $i++){
+                  ?>
                   <tr>
-                    <td>Contact</td>
-                    <td> <button type="button"onclick="location.href='contact.php'"> > </button> </td>
+                  <?php
+                    echo "<td>{$projectArray[$i]['0']}</td>";
+                    echo "<td>{$projectArray[$i]['1']}</td>";
+                    echo "<td>{$projectArray[$i]['2']}</td>";
+                    echo "<td>{$projectArray[$i]['3']}</td>";
+                    echo "<td>{$projectArray[$i]['4']}</td>";
+                    echo "<td>{$projectArray[$i]['5']}</td>";
+                    echo "<td>{$projectArray[$i]['6']}</td>";
+                    echo "<td>{$projectArray[$i]['7']}</td>";
+                    echo "<td>{$projectArray[$i]['8']}</td>";
+                    ?>
                   </tr>
-                    <tr>
-                      <td>Project</td>
-                      <td><button type="button" onclick="location.href='project.php'"> > </button></td>
-                    </tr>
-
-                      <tr>
-                        <td>Host Organization</td>
-                        <td><button type="button" onclick="location.href='hostOrganization.php'"> > </button></td>
-                      </tr>
-
-                        <tr>
-                          <td>Host Address</td>
-                          <td><button type="button" onclick="location.href='hostAddress.php'"> > </button></td>
-                        </tr>
-
-                          <tr>
-                            <td>Faculty</td>
-                            <td><button type="button" onclick="location.href='faculty.php'"> > </button></td>
-                          </tr>
-
-                            <tr>
-                              <td>Department</td>
-                              <td><button type="button" onclick="location.href='department.php'"> > </button></td>
-                            </tr>
-
-                              </tbody>
+                  <?php
+                  }
+                  ?>
+                </tbody>
                 <tfoot>
                 <tr>
-                  <th>Data table name</th>
-                  <th>Link</th>
+                  <th>id</th>
+                  <th>orgName</th>
+                  <th>orgType</th>
+                  <th>hostClass</th>
+                  <th>contactName</th>
+                  <th>notes</th>
+                  <th>NLA</th>
+                  <th>departmentID</th>
+                  <th>WSIB</th>
                 </tr>
                 </tfoot>
               </table>
             </div>
+             <button type="button">Export as CSV</button>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
@@ -488,7 +493,9 @@ if($result = $link -> query($sql)){
 <!-- page script -->
 <script>
   $(function () {
-    $("#example1").DataTable();
+    $("#example1").DataTable({
+      "scrollX": true
+    });
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,
