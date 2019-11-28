@@ -1,11 +1,70 @@
 <?php
 // Initialize the session
 session_start();
+$theid = $_SESSION["theId"];
+
+require_once "config.php";
+
+
+$sql = "SELECT * FROM projectForm WHERE id = $theid";
+
+//Retrieve and store as a variable
+if($result = $link -> query($sql)){
+  while ($row = $result -> fetch_row()){
+    $projectArray = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
+    $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
+  $row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28]);
+
+  }
+}
+
 
 $orgName =  $contact = $address = $phone = $email = $website = $logoConsent = $orgPurpose = "";
 $orgYear = $orgEmployee = $approved =  $theme = $projectScale = $projectTitle = $projectDescription = $projectTask= "";
 $projectStartDate = $projectEndDate = $researchEthics1 = $researchEthics2 = $researchEthics3 = $projectImplementation = $screeningReq1 = $screeningReq2 = "";
 $additionalSkills = $resourcesNeeded = $fundingNeeded =	$additionalNotes = $photoLink= "";
+
+$orgName = $projectArray[1];
+$contact = $projectArray[2];
+$address = $projectArray[3];
+$phone = $projectArray[4];
+$email = $projectArray[5];
+$website = $projectArray[6];
+
+
+$logoConsent = $projectArray[7];
+if ($logoConsent == 1) {
+  $logoConsent = 'Yes';
+}
+else {
+  $logoConsent = 'No';
+}
+
+$orgPurpose = $projectArray[8];
+$orgYear = $projectArray[9];
+$orgEmployee = $projectArray[10];
+$approved = $projectArray[11];
+
+$theme = $projectArray[12];
+$themeA[] = $theme;
+$projectScale = $projectArray[13];
+$projectTitle = $projectArray[14];
+$projectDescription = $projectArray[15];
+$projectTask = $projectArray[16];
+$projectStartDate = $projectArray[17];
+$projectEndDate =  $projectArray[18];
+$researchEthics1 = $projectArray[19];
+$researchEthics2 = $projectArray[20];
+$researchEthics3 = $projectArray[21];
+$projectImplementation = $projectArray[22];
+$screeningReq1 = $projectArray[23];
+$screeningReq2 = $projectArray[24];
+$additionalSkills = $projectArray[25];
+$resourcesNeeded = $projectArray[26];
+$fundingNeeded =	$projectArray[27];
+$additionalNotes = $projectArray[28];
+//$photoLink = $projectArray[29];
+
 
 
 $orgName_err =  $contact_err = $address_err = $phone_err = $email_err = $website_err = $logoConsent_err = $orgPurpose_err = "";
@@ -509,11 +568,11 @@ include 'includes/library.php';
 
 
   //add account details to database
-    $sql="INSERT into projectForm (orgName, contact, address, phone, email,
-      website, 	logoConsent, orgPurpose, orgYear, orgEmployee, approved, theme,
-  	  projectScale, projectTitle, projectDescription, projectTask, 	projectStartDate,
-    	projectEndDate, researchEthics1, researchEthics2, researchEthics3, projectImplementation, 	screeningReq1, screeningReq2, additionalSkills,
-    	resourcesNeeded, fundingNeeded,	additionalNotes, photoLink) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $sql="UPDATE projectForm SET orgName = ?, contact = ?, address = ?, phone = ?, email = ?,
+      website = ?, 	logoConsent = ?, orgPurpose = ?, orgYear = ?, orgEmployee = ?, approved = ?, theme = ?,
+  	  projectScale = ?, projectTitle = ?, projectDescription = ?, projectTask = ?, 	projectStartDate = ?,
+    	projectEndDate = ?, researchEthics1 = ?, researchEthics2 = ?, researchEthics3 = ?, projectImplementation = ?, 	screeningReq1 = ?, screeningReq2 = ?, additionalSkills = ?,
+    	resourcesNeeded = ?, fundingNeeded = ?,	additionalNotes = ?, photoLink = ?) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
     $stmt= $pdo->prepare($sql);
     $stmt ->execute([$orgName, $contact, $address, $phone, $email,
       $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $approved, $theme,
@@ -538,9 +597,6 @@ include 'includes/library.php';
 
 
  ?>
-
-
-
 
 
 <!DOCTYPE html>

@@ -254,6 +254,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                   <p>Project Form</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="pages/tables/projectformentries.php" class="nav-link">
+                  <i class="fas fa-pen nav-icon"></i>
+                  <p>Edit Project Form Entries</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">
