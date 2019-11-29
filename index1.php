@@ -72,7 +72,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <ul class="navbar-nav ml-auto">
     <!-- lockscreen  -->
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="logout.php" accesskey="l" class="nav-link">
+        <a href="../../logout.php" accesskey="l" class="nav-link">
         <i class="nav-icon fas fa-lock"></i>
         </a>
       </li>
@@ -363,7 +363,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 </a>
               </li>
               <li class="nav-item">
-                <a href="logout.php" class="nav-link">
+                <a href="../../logout.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Lockscreen</p>
                 </a>
@@ -871,7 +871,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 <!-- /.card-tools -->
               </div>
               <div class="card-body">
-                <div id="world-map" style="height: 250px; width: 100%;"></div>
+                <div id="map" style="height: 250px; width: 100%;"></div>
               </div>
               <!-- /.card-body-->
               <div class="card-footer bg-transparent">
@@ -902,7 +902,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
               <div class="card-header border-0">
                 <h3 class="card-title">
                   <i class="fas fa-th mr-1"></i>
-                  Sales Graph
+                  Progress Graph
                 </h3>
 
                 <div class="card-tools">
@@ -924,21 +924,14 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                     <input type="text" class="knob" data-readonly="true" value="20" data-width="60" data-height="60"
                            data-fgColor="#39CCCC">
 
-                    <div class="text-white">Mail-Orders</div>
+                    <div class="text-white">TCRC Projects</div>
                   </div>
                   <!-- ./col -->
                   <div class="col-4 text-center">
                     <input type="text" class="knob" data-readonly="true" value="50" data-width="60" data-height="60"
                            data-fgColor="#39CCCC">
 
-                    <div class="text-white">Online</div>
-                  </div>
-                  <!-- ./col -->
-                  <div class="col-4 text-center">
-                    <input type="text" class="knob" data-readonly="true" value="30" data-width="60" data-height="60"
-                           data-fgColor="#39CCCC">
-
-                    <div class="text-white">In-Store</div>
+                    <div class="text-white">U-Links Projects</div>
                   </div>
                   <!-- ./col -->
                 </div>
