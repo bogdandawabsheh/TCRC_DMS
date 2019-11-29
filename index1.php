@@ -72,7 +72,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
     <ul class="navbar-nav ml-auto">
     <!-- lockscreen  -->
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="pages/examples/lockscreen.html" accesskey="l" class="nav-link">
+        <a href="logout.php" accesskey="l" class="nav-link">
         <i class="nav-icon fas fa-lock"></i>
         </a>
       </li>
@@ -249,17 +249,17 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="pages/tables/projectformentries.php" class="nav-link">
                   <i class="fas fa-pen nav-icon"></i>
                   <p>Project Form</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="pages/tables/projectformentries.php" class="nav-link">
+              <!-- <li class="nav-item">
+                <a href="" class="nav-link">
                   <i class="fas fa-pen nav-icon"></i>
                   <p>Edit Project Form Entries</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
           <li class="nav-item">
@@ -363,7 +363,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="logout.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Lockscreen</p>
                 </a>

@@ -26,7 +26,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Project Form Entries</title>
+  <title>Edit Project Forms</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -74,7 +74,7 @@ if($result = $link -> query($sql)){
     <ul class="navbar-nav ml-auto">
     <!-- lockscreen  -->
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="pages/examples/lockscreen.html" accesskey="l" class="nav-link">
+        <a href="logout.php" accesskey="l" class="nav-link">
         <i class="nav-icon fas fa-lock"></i>
         </a>
       </li>
@@ -259,7 +259,7 @@ if($result = $link -> query($sql)){
             </ul>
           </li>
           <li class="nav-item has-treeview menu-open">
-            <a href="#" class="nav-link">
+            <a href="../../pages/tables/main.php" class="nav-link">
               <i class="nav-icon fas fa-table"></i>
               <p>
                 Tables
@@ -359,7 +359,7 @@ if($result = $link -> query($sql)){
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="logout.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Lockscreen</p>
                 </a>
@@ -390,7 +390,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Project Form entries</h1>
+            <h1>Edit Project Form</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -408,7 +408,7 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Project Form Entries</h3>
+              <h3 class="card-title"> Edit Project Form</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">

@@ -72,7 +72,7 @@ if($result = $link -> query($sql)){
     <ul class="navbar-nav ml-auto">
     <!-- lockscreen  -->
     <li class="nav-item d-none d-sm-inline-block">
-        <a href="pages/examples/lockscreen.html" accesskey="l" class="nav-link">
+        <a href="../../logout.php" accesskey="l" class="nav-link">
         <i class="nav-icon fas fa-lock"></i>
         </a>
       </li>
@@ -174,7 +174,7 @@ if($result = $link -> query($sql)){
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index1.php" class="brand-link">
-     <center> <img src="images/TrentCommResCentre.jpg" alt="TCRC"
+     <center> <img src="../../images/TrentCommResCentre.jpg" alt="TCRC"
            style="opacity: .8" width = "90%" height = "70%"> </center>
       <!-- <span class="brand-text font-weight-light">TCRC</span> -->
     </a>
@@ -249,7 +249,7 @@ if($result = $link -> query($sql)){
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="../../pages/tables/projectformentries.php" class="nav-link">
                   <i class="fas fa-pen nav-icon"></i>
                   <p>Project Form</p>
                 </a>
@@ -357,7 +357,7 @@ if($result = $link -> query($sql)){
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <a href="../../logout.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Lockscreen</p>
                 </a>
