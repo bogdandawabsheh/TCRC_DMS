@@ -51,7 +51,7 @@ if($result = $link -> query($sql)){
         <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index1.php" class="nav-link">Home</a>
+        <a href="../../index1.php" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -567,7 +567,9 @@ if($result = $link -> query($sql)){
 <!-- page script -->
 <script>
   $(function () {
-    $("#example1").DataTable();
+    $("#example1").DataTable({
+      "scrollX": true
+    });
     $('#example2').DataTable({
       "paging": true,
       "lengthChange": false,
