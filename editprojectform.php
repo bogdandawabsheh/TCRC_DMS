@@ -1,8 +1,9 @@
 <?php
 // Initialize the session
 session_start();
-$theid = $_SESSION["theId"];
 
+$theid = $_GET['id'];
+echo $theid;
 require_once "config.php";
 
 
