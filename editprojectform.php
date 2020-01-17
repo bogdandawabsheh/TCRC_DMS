@@ -5,6 +5,15 @@ $theid = $_SESSION["theId"];
 
 require_once "config.php";
 
+//TO-DO: Add Security (Check if user requesting the change is of right account type)
+
+
+
+
+
+
+
+//=============================
 
 $sql = "SELECT * FROM projectForm WHERE id = $theid";
 
