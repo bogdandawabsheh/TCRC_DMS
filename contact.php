@@ -7,14 +7,12 @@ $counter = 0;
 
 require_once "config.php";
 //Retrieve the list of currently approved but not yet begun projects
-$sql = "SELECT * FROM projectForm";
+$sql = "SELECT * FROM contact";
 
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
-    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
-    $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
-  $row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28],$row[29]);
+    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13]);
     $counter++;
   }
 }
@@ -26,7 +24,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Edit Project Forms</title>
+  <title>Contacts Data Table</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -45,8 +43,6 @@ if($result = $link -> query($sql)){
 <div class="wrapper">
   <!-- Nav bar import -->
   <?php include 'includes/nav.php'; ?>
-  <!-- Test -->
-
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -55,7 +51,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Project Form</h1>
+            <h1>Contact Datatable</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -73,55 +69,35 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title"> Edit Project Form</h3>
+              <h3 class="card-title">Contacts Data Table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>Edit</th>
                   <th>id</th>
-                  <th>Organization Name</th>
-                  <th>Contact</th>
-                  <th>Address</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Website</th>
-                  <th>Logo Consent</th>
-                  <th>Organization Purpose</th>
-                  <th>Organization Year</th>
-                  <th>Organization Employee</th>
-                  <th>Approved</th>
-                  <th>Theme</th>
-                  <th>Project Scale</th>
-                  <th>Project Title</th>
-                  <th>Project Description</th>
-                  <th>Project Task</th>
-                  <th>Project Start Date</th>
-                  <th>Project End Date</th>
-                  <th>Research Ethics 1</th>
-                  <th>Research Ethics 2</th>
-                  <th>Research Ethics 3</th>
-                  <th>Project Implementation</th>
-                  <th>Screening Requirements 1</th>
-                  <th>Screening Requirements 2</th>
-                  <th>Additional Skills</th>
-                  <th>Resources Needed</th>
-                  <th>Funding Needed</th>
-                  <th>Additional Notes</th>
-                  <th>Photo Link</th>
+                  <th>Title</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Work Email</th>
+                  <th>Work Phone</th>
+                  <th>Work Location</th>
+                  <th>InstitutionID</th>
+                  <th>Contact Type</th>
+                  <th>TCRC mailing approval</th>
+                  <th>ULInks mailing approval</th>
+                  <th>CLinks mailing approval</th>
+                  <th>Show as fellow</th>
+                  <th>Fellow type</th>
                 </tr>
                 </thead>
                 <tbody>
                   <?php
-                  $_SESSION["theId"] =1;
                   for($i = 0; $i < $counter; $i++){
                   ?>
                   <tr>
                   <?php
-                  //  echo "<td><a href='editprojectform.php'>Edit</a></td>";
-                    echo "<td><a href='editprojectform.php?id={$projectArray[$i]['0']}'>Edit</a></td>";
                     echo "<td>{$projectArray[$i]['0']}</td>";
                     echo "<td>{$projectArray[$i]['1']}</td>";
                     echo "<td>{$projectArray[$i]['2']}</td>";
@@ -136,22 +112,6 @@ if($result = $link -> query($sql)){
                     echo "<td>{$projectArray[$i]['11']}</td>";
                     echo "<td>{$projectArray[$i]['12']}</td>";
                     echo "<td>{$projectArray[$i]['13']}</td>";
-                    echo "<td>{$projectArray[$i]['14']}</td>";
-                    echo "<td>{$projectArray[$i]['15']}</td>";
-                    echo "<td>{$projectArray[$i]['16']}</td>";
-                    echo "<td>{$projectArray[$i]['17']}</td>";
-                    echo "<td>{$projectArray[$i]['18']}</td>";
-                    echo "<td>{$projectArray[$i]['19']}</td>";
-                    echo "<td>{$projectArray[$i]['20']}</td>";
-                    echo "<td>{$projectArray[$i]['21']}</td>";
-                    echo "<td>{$projectArray[$i]['22']}</td>";
-                    echo "<td>{$projectArray[$i]['23']}</td>";
-                    echo "<td>{$projectArray[$i]['24']}</td>";
-                    echo "<td>{$projectArray[$i]['25']}</td>";
-                    echo "<td>{$projectArray[$i]['26']}</td>";
-                    echo "<td>{$projectArray[$i]['27']}</td>";
-                    echo "<td>{$projectArray[$i]['28']}</td>";
-                    echo "<td>{$projectArray[$i]['29']}</td>";
                     ?>
                   </tr>
                   <?php
@@ -160,47 +120,25 @@ if($result = $link -> query($sql)){
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>Edit</th>
                   <th>id</th>
-                  <th>Organization Name</th>
-                  <th>Contact</th>
-                  <th>Address</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Website</th>
-                  <th>Logo Consent</th>
-                  <th>Organization Purpose</th>
-                  <th>Organization Year</th>
-                  <th>Organization Employee</th>
-                  <th>Approved</th>
-                  <th>Theme</th>
-                  <th>Project Scale</th>
-                  <th>Project Title</th>
-                  <th>Project Description</th>
-                  <th>Project Task</th>
-                  <th>Project Start Date</th>
-                  <th>Project End Date</th>
-                  <th>Research Ethics 1</th>
-                  <th>Research Ethics 2</th>
-                  <th>Research Ethics 3</th>
-                  <th>Project Implementation</th>
-                  <th>Screening Requirements 1</th>
-                  <th>Screening Requirements 2</th>
-                  <th>Additional Skills</th>
-                  <th>Resources Needed</th>
-                  <th>Funding Needed</th>
-                  <th>Additional Notes</th>
-                  <th>Photo Link</th>
+                  <th>Title</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Work Email</th>
+                  <th>Work Phone</th>
+                  <th>Work Location</th>
+                  <th>InstitutionID</th>
+                  <th>Contact Type</th>
+                  <th>TCRC mailing approval</th>
+                  <th>ULInks mailing approval</th>
+                  <th>CLinks mailing approval</th>
+                  <th>Show as fellow</th>
+                  <th>Fellow type</th>
                 </tr>
                 </tfoot>
               </table>
             </div>
-            <!-- Export as CSV  -->
-            <center>
-            <form method="post" action="export.php">
-               <input type="submit" name="export" value="CSV Export"/>
-                </form>
-                </center>
+             <button type="button">Export as CSV</button>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

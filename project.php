@@ -7,14 +7,12 @@ $counter = 0;
 
 require_once "config.php";
 //Retrieve the list of currently approved but not yet begun projects
-$sql = "SELECT * FROM projectForm";
+$sql = "SELECT * FROM project";
 
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
-    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
-    $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
-  $row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28],$row[29]);
+    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],$row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],$row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28],$row[29],$row[30],$row[31]);
     $counter++;
   }
 }
@@ -26,7 +24,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Edit Project Forms</title>
+  <title>Project Data Table</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -45,7 +43,6 @@ if($result = $link -> query($sql)){
 <div class="wrapper">
   <!-- Nav bar import -->
   <?php include 'includes/nav.php'; ?>
-  <!-- Test -->
 
 
   <!-- Content Wrapper. Contains page content -->
@@ -55,7 +52,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Edit Project Form</h1>
+            <h1>Project Datatable</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -73,55 +70,53 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title"> Edit Project Form</h3>
+              <h3 class="card-title">Project Data Table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>Edit</th>
                   <th>id</th>
-                  <th>Organization Name</th>
-                  <th>Contact</th>
-                  <th>Address</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Website</th>
-                  <th>Logo Consent</th>
-                  <th>Organization Purpose</th>
-                  <th>Organization Year</th>
-                  <th>Organization Employee</th>
-                  <th>Approved</th>
-                  <th>Theme</th>
-                  <th>Project Scale</th>
-                  <th>Project Title</th>
-                  <th>Project Description</th>
-                  <th>Project Task</th>
-                  <th>Project Start Date</th>
-                  <th>Project End Date</th>
-                  <th>Research Ethics 1</th>
-                  <th>Research Ethics 2</th>
-                  <th>Research Ethics 3</th>
-                  <th>Project Implementation</th>
-                  <th>Screening Requirements 1</th>
-                  <th>Screening Requirements 2</th>
-                  <th>Additional Skills</th>
-                  <th>Resources Needed</th>
-                  <th>Funding Needed</th>
-                  <th>Additional Notes</th>
-                  <th>Photo Link</th>
+                  <th>office</th>
+                  <th>research</th>
+                  <th>projectTitle</th>
+                  <th>projectDescription</th>
+                  <th>DepartmentalCode</th>
+                  <th>deptID</th>
+                  <th>dateProposed</th>
+                  <th>dateReceived</th>
+                  <th>approved</th>
+                  <th>signedRPA</th>
+                  <th>WEPA</th>
+                  <th>dateWithdrawn</th>
+                  <th>dateCompleted</th>
+                  <th>HostOrganizationName</th>
+                  <th>hostOrganizationID</th>
+                  <th>courseReq</th>
+                  <th>notes</th>
+                  <th>BFUser</th>
+                  <th>BFActivity</th>
+                  <th>facultySupervisorID</th>
+                  <th>BFDateOfNote</th>
+                  <th>dateProjectMatched</th>
+                  <th>callNumber</th>
+                  <th>staffID</th>
+                  <th>staffCode</th>
+                  <th>PClink</th>
+                  <th>depatmentCode</th>
+                  <th>institutionID</th>
+                  <th>regionID</th>
+                  <th>status</th>
+                  <th>status_percentage</th>
                 </tr>
                 </thead>
                 <tbody>
                   <?php
-                  $_SESSION["theId"] =1;
                   for($i = 0; $i < $counter; $i++){
                   ?>
                   <tr>
                   <?php
-                  //  echo "<td><a href='editprojectform.php'>Edit</a></td>";
-                    echo "<td><a href='editprojectform.php?id={$projectArray[$i]['0']}'>Edit</a></td>";
                     echo "<td>{$projectArray[$i]['0']}</td>";
                     echo "<td>{$projectArray[$i]['1']}</td>";
                     echo "<td>{$projectArray[$i]['2']}</td>";
@@ -152,6 +147,8 @@ if($result = $link -> query($sql)){
                     echo "<td>{$projectArray[$i]['27']}</td>";
                     echo "<td>{$projectArray[$i]['28']}</td>";
                     echo "<td>{$projectArray[$i]['29']}</td>";
+                    echo "<td>{$projectArray[$i]['30']}</td>";
+                    echo "<td>{$projectArray[$i]['31']}</td>";
                     ?>
                   </tr>
                   <?php
@@ -160,47 +157,43 @@ if($result = $link -> query($sql)){
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>Edit</th>
                   <th>id</th>
-                  <th>Organization Name</th>
-                  <th>Contact</th>
-                  <th>Address</th>
-                  <th>Phone</th>
-                  <th>Email</th>
-                  <th>Website</th>
-                  <th>Logo Consent</th>
-                  <th>Organization Purpose</th>
-                  <th>Organization Year</th>
-                  <th>Organization Employee</th>
-                  <th>Approved</th>
-                  <th>Theme</th>
-                  <th>Project Scale</th>
-                  <th>Project Title</th>
-                  <th>Project Description</th>
-                  <th>Project Task</th>
-                  <th>Project Start Date</th>
-                  <th>Project End Date</th>
-                  <th>Research Ethics 1</th>
-                  <th>Research Ethics 2</th>
-                  <th>Research Ethics 3</th>
-                  <th>Project Implementation</th>
-                  <th>Screening Requirements 1</th>
-                  <th>Screening Requirements 2</th>
-                  <th>Additional Skills</th>
-                  <th>Resources Needed</th>
-                  <th>Funding Needed</th>
-                  <th>Additional Notes</th>
-                  <th>Photo Link</th>
+                  <th>office</th>
+                  <th>research</th>
+                  <th>projectTitle</th>
+                  <th>projectDescription</th>
+                  <th>DepartmentalCode</th>
+                  <th>deptID</th>
+                  <th>dateProposed</th>
+                  <th>dateReceived</th>
+                  <th>approved</th>
+                  <th>signedRPA</th>
+                  <th>WEPA</th>
+                  <th>dateWithdrawn</th>
+                  <th>dateCompleted</th>
+                  <th>HostOrganizationName</th>
+                  <th>hostOrganizationID</th>
+                  <th>courseReq</th>
+                  <th>notes</th>
+                  <th>BFUser</th>
+                  <th>BFActivity</th>
+                  <th>facultySupervisorID</th>
+                  <th>BFDateOfNote</th>
+                  <th>dateProjectMatched</th>
+                  <th>callNumber</th>
+                  <th>staffID</th>
+                  <th>staffCode</th>
+                  <th>PClink</th>
+                  <th>depatmentCode</th>
+                  <th>institutionID</th>
+                  <th>regionID</th>
+                  <th>status</th>
+                  <th>status_percentage</th>
                 </tr>
                 </tfoot>
               </table>
             </div>
-            <!-- Export as CSV  -->
-            <center>
-            <form method="post" action="export.php">
-               <input type="submit" name="export" value="CSV Export"/>
-                </form>
-                </center>
+             <button type="button">Export as CSV</button>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
@@ -237,6 +230,7 @@ if($result = $link -> query($sql)){
       "scrollX": true
     });
     $('#example2').DataTable({
+
       "paging": true,
       "lengthChange": false,
       "searching": false,
