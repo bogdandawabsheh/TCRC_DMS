@@ -2,17 +2,19 @@
 // Initialize the session
 session_start();
 
-$projectArray = array();
+$studentArray = array();
 $counter = 0;
 
 require_once "config.php";
 //Retrieve the list of currently approved but not yet begun projects
-$sql = "SELECT * FROM faculty";
+$sql = "SELECT * FROM student";
 
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
-    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3]);
+    $studentArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
+    $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
+  $row[22],$row[23]);
     $counter++;
   }
 }
@@ -24,7 +26,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Faculty Data Table</title>
+  <title>Students </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -43,6 +45,8 @@ if($result = $link -> query($sql)){
 <div class="wrapper">
   <!-- Nav bar import -->
   <?php include 'includes/nav.php'; ?>
+  <!-- Test -->
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -51,7 +55,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Faculty Datatable</h1>
+            <h1>Student Profiles</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -69,17 +73,20 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Faculty Data Table</h3>
+              <h3 class="card-title"> Students</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                  <th>Edit</th>
                   <th>id</th>
-                  <th>firstName</th>
-                  <th>lastName</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Student Number</th>
                   <th>email</th>
+                  <th>major</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -88,32 +95,35 @@ if($result = $link -> query($sql)){
                   ?>
                   <tr>
                   <?php
-                    echo "<td>{$projectArray[$i]['0']}</td>";
-                    echo "<td>{$projectArray[$i]['1']}</td>";
-                    echo "<td>{$projectArray[$i]['2']}</td>";
-                    echo "<td>{$projectArray[$i]['3']}</td>";
+                  //  echo "<td><a href='editprojectform.php'>Edit</a></td>";
+
+                    //Button to be replaced with an Icon. for now, color is changed for visibility
+                    echo "<td><a href='studentprofile.php?id={$studentArray[$i]['0']}' style='color:red'>View</a></td>";
+                    echo "<td><a href='search.php?id={$studentArray[$i]['0']}'>{$studentArray[$i]['0']}</a></td>";
+                    echo "<td><a href='search.php?firstName={$studentArray[$i]['1']}'>{$studentArray[$i]['1']}</a></td>";
+                    echo "<td><a href='search.php?lastName={$studentArray[$i]['2']}'>{$studentArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?studentNumber={$studentArray[$i]['3']}'>{$studentArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?email={$studentArray[$i]['4']}'>{$studentArray[$i]['4']}</a></td>";
+                    echo "<td><a href='search.php?major={$studentArray[$i]['12']}'>{$studentArray[$i]['12']}</a></td>";
                     ?>
                   </tr>
                   <?php
-                  }
+                } //End for loop
                   ?>
                 </tbody>
                 <tfoot>
                 <tr>
+                  <th>Edit</th>
                   <th>id</th>
-                  <th>firstName</th>
-                  <th>lastName</th>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>Student Number</th>
                   <th>email</th>
+                  <th>major</th>
                 </tr>
                 </tfoot>
               </table>
             </div>
-                         <!-- Export to CSV -->
-            <center>
-            <form method="post" action="export-faculty.php">
-               <input type="submit" name="export-faculty" value="CSV Export"/>
-                </form>
-            </center>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

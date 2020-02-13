@@ -70,7 +70,7 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Contacts Data Table</h3>
+              <h3 class="card-title">Department Data Table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -109,7 +109,12 @@ if($result = $link -> query($sql)){
                 </tfoot>
               </table>
             </div>
-             <button type="button">Export as CSV</button>
+            <!-- Export to CSV -->
+            <center>
+            <form method="post" action="export-department.php">
+               <input type="submit" name="export-department" value="CSV Export"/>
+                </form>
+            </center>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

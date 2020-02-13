@@ -18,10 +18,17 @@ $projectDescription_err2 = $projectDescription_err3 = $projectDescription_err4 =
 
 require_once "config.php";
 
+
+
 error_reporting(0);
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
+//Error Checking after form is submitted
+// Checking if any required fields are empty
+
+
+//Organization Name
   if(empty(trim($_POST["orgName"]))){
     //error declaration
     $orgName_err = "Please input your Organization Name.";
@@ -38,6 +45,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     //variable declaration
     $contact  = trim($_POST["contact"]);
   }
+
 
   if(empty(trim($_POST["address"]))){
     //error declaration
@@ -82,7 +90,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $logoConsent_err = "Please choose an option for Logo Consent.";
   } else {
     //variable declaration
-    $logoConsent = trim($_POST["logoConsent"]);
+    $logoConsent = $_POST["logoConsent"];
 
     if($logoConsent == 'Yes'){
       $logoConsent = 1;
@@ -112,7 +120,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgYear_err = "Please input your Organization Year.";
   } else {
     //variable declaration
-    $orgYear = trim($_POST["orgYear"]);
+    $orgYear = $_POST["orgYear"];
   }
 
 
@@ -123,7 +131,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgEmployee_err = "Please input your Organization Employee.";
   } else {
     //variable declaration
-    $orgEmployee = trim($_POST["orgEmployee"]);
+    $orgEmployee = $_POST["orgEmployee"];
   }
 
 
@@ -163,7 +171,7 @@ empty(trim($_POST["environmentalTheme"])) &&empty(trim($_POST["socialTheme"]))
       $themeA[] = $_POST['themeOther'];
     }
 
-    $theme = implode( ", ", $themeA );
+    $theme = implode( " ", $themeA );
   }
 
 
@@ -177,10 +185,10 @@ empty(trim($_POST["environmentalTheme"])) &&empty(trim($_POST["socialTheme"]))
 
 
   $projectScaleA = array();
-  if(empty(trim($_POST["scale1"])) && empty(trim($_POST["scale2"])) &&
-empty(trim($_POST["scale3"])) && empty(trim($_POST["scale4"])) &&
-empty(trim($_POST["scale5"])) && empty(trim($_POST["scale6"])) &&
-empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
+  if(empty($_POST["scale1"]) && empty($_POST["scale2"]) &&
+empty($_POST["scale3"]) && empty($_POST["scale4"]) &&
+empty($_POST["scale5"]) && empty($_POST["scale6"]) &&
+empty($_POST["scale7"]) && empty($_POST["projectScale"])){
     //error declaration
     $projectScale_err = "Please select at least 1 Project Scale.";
   } else {
@@ -220,7 +228,7 @@ empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
     $projectTitle_err = "Please input your Project Title.";
   } else {
     //variable declaration
-    $projectTitle = trim($_POST["projectTitle"]);
+    $projectTitle = $_POST["projectTitle"];
   }
 
 
@@ -235,16 +243,13 @@ empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
 
 
 
-   $description1 = "";
-   $description2 = "";
-   $description3 = "";
-   $description4 = "";
-   $description5 = "";
+
+   $projectDescriptionA = array();
   if(empty(trim($_POST["description1"]))){
     //error declaration
     $projectDescription_err1 = "Please input your Project Description.";
   }else {
-    $description1 = $_POST['description1'];
+    $projectDescriptionA[] = $_POST['description1'];
   }
 
 
@@ -253,14 +258,14 @@ empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
     // error declaration
     $projectDescription_err2 = "Please input your Project Description.";
   }else {
-    $description2 = $_POST['description2'];
+    $projectDescriptionA[] = $_POST['description2'];
   }
 
   if(empty(trim($_POST["description3"]))) {
     // error declaration
     $projectDescription_err3 = "Please input your Project Description.";
   }else {
-    $description3 = $_POST['description3'];
+    $projectDescriptionA[] = $_POST['description3'];
   }
 
 
@@ -268,7 +273,7 @@ empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
     // error declaration
     $projectDescription_err4 = "Please input your Project Description.";
   }else {
-    $description4 = $_POST['description4'];
+    $projectDescriptionA[] = $_POST['description4'];
   }
 
 
@@ -276,26 +281,32 @@ empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
     // error declaration
     $projectDescription_err5 = "Please input your Project Description.";
   }else {
-    $description5 = $_POST['description5'];
+    $projectDescriptionA[] = $_POST['description5'];
   }
 
 
-    $projectDescription = $description1.", ".$description2.", ".$description3.", ".$description4.", ".$description5;
+    $projectDescription = implode( "; ", $projectDescriptionA);
 
 
 
 
 
-  $projectTask1 = $_POST['projectTask1'];
-  $projectTask2 = $_POST['projectTask2'];
-  $projectTask3 = $_POST['projectTask3'];
+$projectTaskA = array();
   if(empty(trim($_POST["projectTask1"])) && empty(trim($_POST["projectTask2"])) &&
 empty(trim($_POST["projectTask3"]))){
     //error declaration
     $projectTask_err = "Please input a Project Task.";
   } else {
     //variable declaration
-    $projectTask = "Task 1: ".$projectTask1.". Task2: ".$projectTask2.". Task3: ".$projectTask3;
+    $projectTaskA[] = $_POST['projectTask1'];
+    if (isset($_POST['projectTask2'])) {
+      $projectTaskA[] = $_POST['projectTask2'];
+    }elseif (isset($_POST['projectTask3'])) {
+    $projectTaskA[] = $_POST['projectTask3'];
+    }
+
+    $projectTask = implode( "; ", $projectTaskA);
+
   }
 
 
@@ -304,7 +315,7 @@ empty(trim($_POST["projectTask3"]))){
     $projectStartDate_err = "Please input your Project Start Date.";
   } else {
     //variable declaration
-    $projectStartDate = trim($_POST["startDate"]);
+    $projectStartDate = $_POST["startDate"];
   }
 
 
@@ -315,16 +326,16 @@ empty(trim($_POST["projectTask3"]))){
     $projectEndDate_err = "Please input your Project End Date.";
   } else {
     //variable declaration
-    $projectEndDate = trim($_POST["endDate"]);
+    $projectEndDate = $_POST["endDate"];
   }
 
 
 
   $projectImplementationA = array();
-  if(empty(trim($_POST["projectImplementation1"])) && empty(trim($_POST["projectImplementation2"])) &&
-empty(trim($_POST["projectImplementation3"])) && empty(trim($_POST["projectImplementation4"])) &&
-empty(trim($_POST["projectImplementation5"])) && empty(trim($_POST["projectImplementation6"])) &&
-empty(trim($_POST["otherProjectImplementation"]))){
+  if(empty($_POST["projectImplementation1"]) && empty($_POST["projectImplementation2"]) &&
+empty($_POST["projectImplementation3"]) && empty($_POST["projectImplementation4"]) &&
+empty($_POST["projectImplementation5"]) && empty($_POST["projectImplementation6"]) &&
+empty($_POST["otherProjectImplementation"])){
     //error declaration
     $projectImplementation_err = "Please choose at least 1 option for Project Implementation.";
   } else {
@@ -486,9 +497,20 @@ if(empty(trim($_POST["additionalNotes"]))){
 
 
 
+if (isset($_POST["additionalSkills"])) {
+  $additionalSkills = $_POST["additionalSkills"];
+}
+else {
+  $additionalSkills = null;
+}
 
-$additionalSkills = $_POST["additionalSkills"];
-$photoLink = $_POST["photoLink"];
+if (isset($_POST["photoLink"])) {
+  $photoLink = $_POST["photoLink"];
+}
+else {
+  $photoLink = null;
+}
+
 
 if(empty($orgName_err) && empty ($contact_err) && empty ($address_err)
 && empty ($phone_err) && empty ($email_err) && empty ($website_err)
@@ -504,35 +526,40 @@ if(empty($orgName_err) && empty ($contact_err) && empty ($address_err)
 && empty ($additionalNotes_err) && empty ($resourcesNeeded_err))
 {
 
-include 'includes/library.php';
-  $pdo = & dbconnect();
+// include 'includes/library.php';
+//   $pdo = & dbconnect();
 
 
   //add account details to database
-    $sql="INSERT into projectForm (orgName, contact, address, phone, email,
+    $sql="INSERT into projectForm (id, orgName, contact, address, phone, email,
       website, 	logoConsent, orgPurpose, orgYear, orgEmployee, approved, theme,
   	  projectScale, projectTitle, projectDescription, projectTask, 	projectStartDate,
     	projectEndDate, researchEthics1, researchEthics2, researchEthics3, projectImplementation, 	screeningReq1, screeningReq2, additionalSkills,
-    	resourcesNeeded, fundingNeeded,	additionalNotes, photoLink) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-    $stmt= $pdo->prepare($sql);
-    $stmt ->execute([$orgName, $contact, $address, $phone, $email,
-      $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $approved, $theme,
-  	  $projectScale, $projectTitle, $projectDescription, $projectTask, 	$projectStartDate,
-    	$projectEndDate, $researchEthics1, $researchEthics2, $researchEthics3, $projectImplementation, $screeningReq1, $screeningReq2, $additionalSkills,
-    	$resourcesNeeded, $fundingNeeded,	$additionalNotes, $photoLink]);
+    	resourcesNeeded, fundingNeeded,	additionalNotes, photoLink) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);";
 
+      if($stmt = mysqli_prepare($link,$sql)){
 
-  echo "application submitted";
-  header("location: google.com");
+        $id = null;
+        //BInd parameters
+        mysqli_stmt_bind_param($stmt, "isssssssssssssssssssssssssssss",$id, $orgName, $contact, $address, $phone, $email,
+          $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $approved, $theme,
+          $projectScale, $projectTitle, $projectDescription, $projectTask, 	$projectStartDate,
+          $projectEndDate, $researchEthics1, $researchEthics2, $researchEthics3, $projectImplementation, $screeningReq1, $screeningReq2, $additionalSkills,
+          $resourcesNeeded, $fundingNeeded,	$additionalNotes, $photoLink);
 
-}
+          //Execute. If there are no problems, redirect
+          if(mysqli_stmt_execute($stmt)){
+              // Redirect to login page
+              header("location: projectformentries.php");
+          } else{ //if there are problems, resume page and print out an error message
+              echo "Something went wrong. Please try again later.";
+          }
 
+      } // end if prepare
 
+}//end if no errors
 
-
-
-
-
+mysqli_close($link);
 
 }
 
@@ -773,7 +800,7 @@ include 'includes/library.php';
     <span class="help-block"><?php echo $projectScale_err; ?></span>
     <div class="block">
       <label for="scale1">It’s a single/discreet project</label>
-      <input type="checkbox" name="scale1" id="scale1" value="It’s a single/discreet project"  <?php if(in_array("It’s a single/discreet project", $projectScaleA)) echo 'checked = \'checked\''?>>
+      <input type="checkbox" name="scale1" id="scale1" value="Its a single/discreet project"  <?php if(in_array("Its a single/discreet project", $projectScaleA)) echo 'checked = \'checked\''?>>
     </div>
 
     <div class="block">
@@ -783,12 +810,12 @@ include 'includes/library.php';
 
     <div class="block">
       <label for="scale3">It’s a single year project</label>
-      <input type="checkbox" name="scale3" id="scale3" value="It’s a single year project"<?php if(in_array("It’s a single year project", $projectScaleA)) echo 'checked = \'checked\''?>>
+      <input type="checkbox" name="scale3" id="scale3" value="Its a single year project"<?php if(in_array("Its a single year project", $projectScaleA)) echo 'checked = \'checked\''?>>
     </div>
 
     <div class="block">
       <label for="scale4">It’s a multi-year project</label>
-      <input type="checkbox" name="scale4" id="scale4" value="It’s a multi-year project"  <?php if(in_array("It’s a multi-year project", $projectScaleA)) echo 'checked = \'checked\''?>>
+      <input type="checkbox" name="scale4" id="scale4" value="Its a multi-year project"  <?php if(in_array("Its a multi-year project", $projectScaleA)) echo 'checked = \'checked\''?>>
     </div>
 
     <div class="block">

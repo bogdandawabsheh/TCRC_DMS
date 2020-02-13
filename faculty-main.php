@@ -2,7 +2,7 @@
 // Initialize the session
 session_start();
 
-$projectArray = array();
+$facultyArray = array();
 $counter = 0;
 
 require_once "config.php";
@@ -12,7 +12,7 @@ $sql = "SELECT * FROM faculty";
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
-    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3]);
+    $facultyArray[$counter] = array($row[0],$row[1],$row[2],$row[3]);
     $counter++;
   }
 }
@@ -76,6 +76,7 @@ if($result = $link -> query($sql)){
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                  <th>View</th>
                   <th>id</th>
                   <th>firstName</th>
                   <th>lastName</th>
@@ -88,10 +89,11 @@ if($result = $link -> query($sql)){
                   ?>
                   <tr>
                   <?php
-                    echo "<td>{$projectArray[$i]['0']}</td>";
-                    echo "<td>{$projectArray[$i]['1']}</td>";
-                    echo "<td>{$projectArray[$i]['2']}</td>";
-                    echo "<td>{$projectArray[$i]['3']}</td>";
+                    echo "<td><a href='facultyprofile.php?id={$facultyArray[$i]['0']}' style='color:red'>View</a></td>";
+                    echo "<td><a href='search.php?id={$facultyArray[$i]['0']}'>{$facultyArray[$i]['0']}</a></td>";
+                    echo "<td><a href='search.php?firstName={$facultyArray[$i]['1']}'>{$facultyArray[$i]['1']}</a></td>";
+                    echo "<td><a href='search.php?lastName={$facultyArray[$i]['2']}'>{$facultyArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?email={$facultyArray[$i]['3']}'>{$facultyArray[$i]['3']}</a></td>";
                     ?>
                   </tr>
                   <?php
@@ -100,6 +102,7 @@ if($result = $link -> query($sql)){
                 </tbody>
                 <tfoot>
                 <tr>
+                  <th>View</th>
                   <th>id</th>
                   <th>firstName</th>
                   <th>lastName</th>

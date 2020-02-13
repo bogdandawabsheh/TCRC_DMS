@@ -7,12 +7,14 @@ $counter = 0;
 
 require_once "config.php";
 //Retrieve the list of currently approved but not yet begun projects
-$sql = "SELECT * FROM faculty";
+$sql = "SELECT * FROM project";
 
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
-    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3]);
+    $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
+    $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
+  $row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28],$row[29]);
     $counter++;
   }
 }
@@ -24,7 +26,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Faculty Data Table</title>
+  <title>Projects </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -43,6 +45,8 @@ if($result = $link -> query($sql)){
 <div class="wrapper">
   <!-- Nav bar import -->
   <?php include 'includes/nav.php'; ?>
+  <!-- Test -->
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -51,7 +55,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Faculty Datatable</h1>
+            <h1>Project Profiles</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -69,29 +73,45 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Faculty Data Table</h3>
+              <h3 class="card-title"> Project</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                  <th>Edit</th>
                   <th>id</th>
-                  <th>firstName</th>
-                  <th>lastName</th>
-                  <th>email</th>
+                  <th>office</th>
+                  <th>research</th>
+                  <th>projectTitle</th>
+                  <th>projectID</th>
+                  <th>projectDescription</th>
+                  <th>DepartmentalCode</th>
+                  <th>deptID</th>
+                  <th>dateProposed</th>
+                  <th>dateReceived</th>
                 </tr>
                 </thead>
                 <tbody>
                   <?php
+                  $_SESSION["theId"] =1;
                   for($i = 0; $i < $counter; $i++){
                   ?>
                   <tr>
                   <?php
-                    echo "<td>{$projectArray[$i]['0']}</td>";
-                    echo "<td>{$projectArray[$i]['1']}</td>";
-                    echo "<td>{$projectArray[$i]['2']}</td>";
-                    echo "<td>{$projectArray[$i]['3']}</td>";
+                  //  echo "<td><a href='editprojectform.php'>Edit</a></td>";
+                    echo "<td><a href='projectprofile.php?id={$projectArray[$i]['0']}' style='color:red'>View</a></td>";
+                    echo "<td><a href='search.php?id={$projectArray[$i]['0']}'>{$projectArray[$i]['0']}</a></td>";
+                    echo "<td><a href='search.php?office={$projectArray[$i]['1']}'>{$projectArray[$i]['1']}</a></td>";
+                    echo "<td><a href='search.php?research={$projectArray[$i]['2']}'>{$projectArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?projectTitle={$projectArray[$i]['3']}'>{$projectArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?projectID={$projectArray[$i]['4']}'>{$projectArray[$i]['4']}</a></td>";
+                    echo "<td><a href='search.php?projectDesc={$projectArray[$i]['5']}'>{$projectArray[$i]['5']}</a></td>";
+                    echo "<td><a href='search.php?deptCode={$projectArray[$i]['6']}'>{$projectArray[$i]['6']}</a></td>";
+                    echo "<td><a href='search.php?deptID={$projectArray[$i]['7']}'>{$projectArray[$i]['7']}</a></td>";
+                    echo "<td><a href='search.php?dateProposed={$projectArray[$i]['8']}'>{$projectArray[$i]['8']}</a></td>";
+                    echo "<td><a href='search.php?dateReceived={$projectArray[$i]['9']}'>{$projectArray[$i]['9']}</a></td>";
                     ?>
                   </tr>
                   <?php
@@ -100,20 +120,21 @@ if($result = $link -> query($sql)){
                 </tbody>
                 <tfoot>
                 <tr>
+                  <th>Edit</th>
                   <th>id</th>
-                  <th>firstName</th>
-                  <th>lastName</th>
-                  <th>email</th>
+                  <th>office</th>
+                  <th>research</th>
+                  <th>projectTitle</th>
+                  <th>projectID</th>
+                  <th>projectDescription</th>
+                  <th>DepartmentalCode</th>
+                  <th>deptID</th>
+                  <th>dateProposed</th>
+                  <th>dateReceived</th>
                 </tr>
                 </tfoot>
               </table>
             </div>
-                         <!-- Export to CSV -->
-            <center>
-            <form method="post" action="export-faculty.php">
-               <input type="submit" name="export-faculty" value="CSV Export"/>
-                </form>
-            </center>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

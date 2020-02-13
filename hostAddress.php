@@ -24,7 +24,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Contacts Data Table</title>
+  <title>Host Address Data Table</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -52,7 +52,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Contact Datatable</h1>
+            <h1>Host Address Datatable</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -70,7 +70,7 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Contacts Data Table</h3>
+              <h3 class="card-title">Host Address Data Table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -97,16 +97,16 @@ if($result = $link -> query($sql)){
                   <tr>
                   <?php
                     echo "<td>{$projectArray[$i]['0']}</td>";
-                    echo "<td>{$projectArray[$i]['1']}</td>";
-                    echo "<td>{$projectArray[$i]['2']}</td>";
-                    echo "<td>{$projectArray[$i]['3']}</td>";
-                    echo "<td>{$projectArray[$i]['4']}</td>";
-                    echo "<td>{$projectArray[$i]['5']}</td>";
-                    echo "<td>{$projectArray[$i]['6']}</td>";
-                    echo "<td>{$projectArray[$i]['7']}</td>";
-                    echo "<td>{$projectArray[$i]['8']}</td>";
-                    echo "<td>{$projectArray[$i]['9']}</td>";
-                    echo "<td>{$projectArray[$i]['10']}</td>";
+                    echo "<td><a href='search.php?address={$projectArray[$i]['1']}'>{$projectArray[$i]['1']}</a></td>";
+                    echo "<td><a href='search.php?addressALT={$projectArray[$i]['2']}'>{$projectArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?city={$projectArray[$i]['3']}'>{$projectArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?province={$projectArray[$i]['4']}'>{$projectArray[$i]['4']}</a></td>";
+                    echo "<td><a href='search.php?phone1={$projectArray[$i]['5']}'>{$projectArray[$i]['5']}</a></td>";
+                    echo "<td><a href='search.php?phone2={$projectArray[$i]['6']}'>{$projectArray[$i]['6']}</a></td>";
+                    echo "<td><a href='search.php?fax={$projectArray[$i]['7']}'>{$projectArray[$i]['7']}</a></td>";
+                    echo "<td><a href='search.php?email1={$projectArray[$i]['8']}'>{$projectArray[$i]['8']}</a></td>";
+                    echo "<td><a href='search.php?email2={$projectArray[$i]['9']}'>{$projectArray[$i]['9']}</a></td>";
+                    echo "<td><a href='search.php?website={$projectArray[$i]['10']}'>{$projectArray[$i]['10']}</a></td>";
                     ?>
                   </tr>
                   <?php
@@ -130,7 +130,12 @@ if($result = $link -> query($sql)){
                 </tfoot>
               </table>
             </div>
-             <button type="button">Export as CSV</button>
+            <!-- Export to CSV -->
+                         <center>
+            <form method="post" action="export-hostaddress.php">
+               <input type="submit" name="export-hostaddress" value="CSV Export"/>
+                </form>
+            </center>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

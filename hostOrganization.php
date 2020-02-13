@@ -52,7 +52,7 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Contact Datatable</h1>
+            <h1>Host Organization Datatable</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -70,7 +70,7 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Contacts Data Table</h3>
+              <h3 class="card-title">Host Organization Data Table</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -124,7 +124,12 @@ if($result = $link -> query($sql)){
                 </tfoot>
               </table>
             </div>
-             <button type="button">Export as CSV</button>
+                                      <!-- Export to CSV -->
+            <center>
+            <form method="post" action="export-hostOrganization.php">
+               <input type="submit" name="export-hostOrganization" value="CSV Export"/>
+                </form>
+            </center>
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

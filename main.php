@@ -77,44 +77,44 @@ if($result = $link -> query($sql)){
                 <thead>
                 <tr>
                   <th>Data table name</th>
-                  <th>Link</th>
+                  <th>Direct</th>
                 </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td>Contact</td>
-                    <td> <button type="button"onclick="location.href='contact.php'"> > </button> </td>
+                    <td> <button type="button"onclick="window.open('contact.php')"> <span class="fas fa-external-link-alt"></span> </button> </td>
                   </tr>
                     <tr>
                       <td>Project</td>
-                      <td><button type="button" onclick="location.href='project.php'"> > </button></td>
+                      <td><button type="button" onclick="window.open('project.php')"> <span class="fas fa-external-link-alt"></span> </button></td>
                     </tr>
 
                       <tr>
                         <td>Host Organization</td>
-                        <td><button type="button" onclick="location.href='hostOrganization.php'"> > </button></td>
+                        <td><button type="button" onclick="window.open('hostOrganization.php')"> <span class="fas fa-external-link-alt"></span> </button></td>
                       </tr>
 
                         <tr>
                           <td>Host Address</td>
-                          <td><button type="button" onclick="location.href='hostAddress.php'"> > </button></td>
+                          <td><button type="button" onclick="window.open('hostAddress.php')"> <span class="fas fa-external-link-alt"></span> </button></td>
                         </tr>
 
                           <tr>
                             <td>Faculty</td>
-                            <td><button type="button" onclick="location.href='faculty.php'"> > </button></td>
+                            <td><button type="button" onclick="window.open('faculty.php')"> <span class="fas fa-external-link-alt"></span> </button></td>
                           </tr>
 
                             <tr>
                               <td>Department</td>
-                              <td><button type="button" onclick="location.href='department.php'"> > </button></td>
+                              <td><button type="button" onclick="window.open('department.php')"> <span class="fas fa-external-link-alt"></span> </button></td>
                             </tr>
 
                               </tbody>
                 <tfoot>
                 <tr>
                   <th>Data table name</th>
-                  <th>Link</th>
+                  <th>Direct</th>
                 </tr>
                 </tfoot>
               </table>

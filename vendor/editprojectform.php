@@ -1,8 +1,33 @@
 <?php
 // Initialize the session
 session_start();
+$theid = $_GET["id"];
 
-//error_reporting(0);
+require_once "config.php";
+
+//TO-DO: Add Security (Check if user requesting the change is of right account type)
+
+
+
+
+
+
+
+//=============================
+
+include 'includes/nav.php';
+
+$sql = "SELECT * FROM projectForm WHERE id = $theid";
+
+//Retrieve and store as a variable
+if($result = $link -> query($sql)){
+  while ($row = $result -> fetch_row()){
+    $projectArray = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
+    $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
+  $row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28]);
+
+  }
+}
 
 
 $orgName =  $contact = $address = $phone = $email = $website = $logoConsent = $orgPurpose = "";
@@ -10,24 +35,46 @@ $orgYear = $orgEmployee = $approved =  $theme = $projectScale = $projectTitle = 
 $projectStartDate = $projectEndDate = $researchEthics1 = $researchEthics2 = $researchEthics3 = $projectImplementation = $screeningReq1 = $screeningReq2 = "";
 $additionalSkills = $resourcesNeeded = $fundingNeeded =	$additionalNotes = $photoLink= "";
 
-if (isset($_GET["id"])) {
-  $theid = filter_var($_GET["id"],FILTER_SANITIZE_STRING);
-  $_SESSION["id"] = $theid;
+$orgName = $projectArray[1];
+$contact = $projectArray[2];
+$address = $projectArray[3];
+$phone = $projectArray[4];
+$email = $projectArray[5];
+$website = $projectArray[6];
+
+
+$logoConsent = $projectArray[7];
+if ($logoConsent == 1) {
+  $logoConsent = 'Yes';
 }
-elseif (isset($_SESSION["id"])){
-  $theid = $_SESSION["id"];
-} else {
-  $message = "No GET/POST found. Ensure you are accessing correctly.";
-  echo "<script type='text/javascript'>alert('$message');</script>";
-  header("location: index1.php");
+else {
+  $logoConsent = 'No';
 }
 
-require_once "config.php";
+$orgPurpose = $projectArray[8];
+$orgYear = $projectArray[9];
+$orgEmployee = $projectArray[10];
+$approved = $projectArray[11];
 
-//TO-DO: Add Security (Check if user requesting the change is of right account type)
-
-
-//=============================
+$theme = $projectArray[12];
+$themeA[] = $theme;
+$projectScale = $projectArray[13];
+$projectTitle = $projectArray[14];
+$projectDescription = $projectArray[15];
+$projectTask = $projectArray[16];
+$projectStartDate = $projectArray[17];
+$projectEndDate =  $projectArray[18];
+$researchEthics1 = $projectArray[19];
+$researchEthics2 = $projectArray[20];
+$researchEthics3 = $projectArray[21];
+$projectImplementation = $projectArray[22];
+$screeningReq1 = $projectArray[23];
+$screeningReq2 = $projectArray[24];
+$additionalSkills = $projectArray[25];
+$resourcesNeeded = $projectArray[26];
+$fundingNeeded =	$projectArray[27];
+$additionalNotes = $projectArray[28];
+//$photoLink = $projectArray[29];
 
 
 
@@ -40,30 +87,17 @@ $additionalSkills_err = $resourcesNeeded_err = $fundingNeeded_err =	$additionalN
 $projectDescription_err2 = $projectDescription_err3 = $projectDescription_err4 = $projectDescription_err5 = "";
 
 require_once "config.php";
+
 error_reporting(0);
-
-
-
-//Populating the form
-
-
-
-
-
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
 
-//Error Checking after form is submitted
-// Checking if any required fields are empty
-
-
-//Organization Name
   if(empty(trim($_POST["orgName"]))){
     //error declaration
     $orgName_err = "Please input your Organization Name.";
   } else {
     //variable declaration
-    $orgName  = $_POST["orgName"];
+    $orgName  = trim($_POST["orgName"]);
   }
 
 
@@ -74,7 +108,6 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     //variable declaration
     $contact  = trim($_POST["contact"]);
   }
-
 
   if(empty(trim($_POST["address"]))){
     //error declaration
@@ -119,7 +152,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $logoConsent_err = "Please choose an option for Logo Consent.";
   } else {
     //variable declaration
-    $logoConsent = $_POST["logoConsent"];
+    $logoConsent = trim($_POST["logoConsent"]);
 
     if($logoConsent == 'Yes'){
       $logoConsent = 1;
@@ -149,7 +182,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgYear_err = "Please input your Organization Year.";
   } else {
     //variable declaration
-    $orgYear = $_POST["orgYear"];
+    $orgYear = trim($_POST["orgYear"]);
   }
 
 
@@ -160,7 +193,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgEmployee_err = "Please input your Organization Employee.";
   } else {
     //variable declaration
-    $orgEmployee = $_POST["orgEmployee"];
+    $orgEmployee = trim($_POST["orgEmployee"]);
   }
 
 
@@ -200,7 +233,7 @@ empty(trim($_POST["environmentalTheme"])) &&empty(trim($_POST["socialTheme"]))
       $themeA[] = $_POST['themeOther'];
     }
 
-    $theme = implode( " ", $themeA );
+    $theme = implode( ", ", $themeA );
   }
 
 
@@ -214,10 +247,10 @@ empty(trim($_POST["environmentalTheme"])) &&empty(trim($_POST["socialTheme"]))
 
 
   $projectScaleA = array();
-  if(empty($_POST["scale1"]) && empty($_POST["scale2"]) &&
-empty($_POST["scale3"]) && empty($_POST["scale4"]) &&
-empty($_POST["scale5"]) && empty($_POST["scale6"]) &&
-empty($_POST["scale7"]) && empty($_POST["projectScale"])){
+  if(empty(trim($_POST["scale1"])) && empty(trim($_POST["scale2"])) &&
+empty(trim($_POST["scale3"])) && empty(trim($_POST["scale4"])) &&
+empty(trim($_POST["scale5"])) && empty(trim($_POST["scale6"])) &&
+empty(trim($_POST["scale7"])) && empty(trim($_POST["projectScale"]))){
     //error declaration
     $projectScale_err = "Please select at least 1 Project Scale.";
   } else {
@@ -257,7 +290,7 @@ empty($_POST["scale7"]) && empty($_POST["projectScale"])){
     $projectTitle_err = "Please input your Project Title.";
   } else {
     //variable declaration
-    $projectTitle = $_POST["projectTitle"];
+    $projectTitle = trim($_POST["projectTitle"]);
   }
 
 
@@ -272,13 +305,16 @@ empty($_POST["scale7"]) && empty($_POST["projectScale"])){
 
 
 
-
-   $projectDescriptionA = array();
+   $description1 = "";
+   $description2 = "";
+   $description3 = "";
+   $description4 = "";
+   $description5 = "";
   if(empty(trim($_POST["description1"]))){
     //error declaration
     $projectDescription_err1 = "Please input your Project Description.";
   }else {
-    $projectDescriptionA[] = $_POST['description1'];
+    $description1 = $_POST['description1'];
   }
 
 
@@ -287,14 +323,14 @@ empty($_POST["scale7"]) && empty($_POST["projectScale"])){
     // error declaration
     $projectDescription_err2 = "Please input your Project Description.";
   }else {
-    $projectDescriptionA[] = $_POST['description2'];
+    $description2 = $_POST['description2'];
   }
 
   if(empty(trim($_POST["description3"]))) {
     // error declaration
     $projectDescription_err3 = "Please input your Project Description.";
   }else {
-    $projectDescriptionA[] = $_POST['description3'];
+    $description3 = $_POST['description3'];
   }
 
 
@@ -302,7 +338,7 @@ empty($_POST["scale7"]) && empty($_POST["projectScale"])){
     // error declaration
     $projectDescription_err4 = "Please input your Project Description.";
   }else {
-    $projectDescriptionA[] = $_POST['description4'];
+    $description4 = $_POST['description4'];
   }
 
 
@@ -310,32 +346,26 @@ empty($_POST["scale7"]) && empty($_POST["projectScale"])){
     // error declaration
     $projectDescription_err5 = "Please input your Project Description.";
   }else {
-    $projectDescriptionA[] = $_POST['description5'];
+    $description5 = $_POST['description5'];
   }
 
 
-    $projectDescription = implode( "; ", $projectDescriptionA);
+    $projectDescription = $description1.", ".$description2.", ".$description3.", ".$description4.", ".$description5;
 
 
 
 
 
-$projectTaskA = array();
+  $projectTask1 = $_POST['projectTask1'];
+  $projectTask2 = $_POST['projectTask2'];
+  $projectTask3 = $_POST['projectTask3'];
   if(empty(trim($_POST["projectTask1"])) && empty(trim($_POST["projectTask2"])) &&
 empty(trim($_POST["projectTask3"]))){
     //error declaration
     $projectTask_err = "Please input a Project Task.";
   } else {
     //variable declaration
-    $projectTaskA[] = $_POST['projectTask1'];
-    if (isset($_POST['projectTask2'])) {
-      $projectTaskA[] = $_POST['projectTask2'];
-    }elseif (isset($_POST['projectTask3'])) {
-    $projectTaskA[] = $_POST['projectTask3'];
-    }
-
-    $projectTask = implode( "; ", $projectTaskA);
-
+    $projectTask = "Task 1: ".$projectTask1.". Task2: ".$projectTask2.". Task3: ".$projectTask3;
   }
 
 
@@ -344,7 +374,7 @@ empty(trim($_POST["projectTask3"]))){
     $projectStartDate_err = "Please input your Project Start Date.";
   } else {
     //variable declaration
-    $projectStartDate = $_POST["startDate"];
+    $projectStartDate = trim($_POST["startDate"]);
   }
 
 
@@ -355,16 +385,16 @@ empty(trim($_POST["projectTask3"]))){
     $projectEndDate_err = "Please input your Project End Date.";
   } else {
     //variable declaration
-    $projectEndDate = $_POST["endDate"];
+    $projectEndDate = trim($_POST["endDate"]);
   }
 
 
 
   $projectImplementationA = array();
-  if(empty($_POST["projectImplementation1"]) && empty($_POST["projectImplementation2"]) &&
-empty($_POST["projectImplementation3"]) && empty($_POST["projectImplementation4"]) &&
-empty($_POST["projectImplementation5"]) && empty($_POST["projectImplementation6"]) &&
-empty($_POST["otherProjectImplementation"])){
+  if(empty(trim($_POST["projectImplementation1"])) && empty(trim($_POST["projectImplementation2"])) &&
+empty(trim($_POST["projectImplementation3"])) && empty(trim($_POST["projectImplementation4"])) &&
+empty(trim($_POST["projectImplementation5"])) && empty(trim($_POST["projectImplementation6"])) &&
+empty(trim($_POST["otherProjectImplementation"]))){
     //error declaration
     $projectImplementation_err = "Please choose at least 1 option for Project Implementation.";
   } else {
@@ -526,20 +556,9 @@ if(empty(trim($_POST["additionalNotes"]))){
 
 
 
-if (isset($_POST["additionalSkills"])) {
-  $additionalSkills = $_POST["additionalSkills"];
-}
-else {
-  $additionalSkills = null;
-}
 
-if (isset($_POST["photoLink"])) {
-  $photoLink = $_POST["photoLink"];
-}
-else {
-  $photoLink = null;
-}
-
+$additionalSkills = $_POST["additionalSkills"];
+$photoLink = $_POST["photoLink"];
 
 if(empty($orgName_err) && empty ($contact_err) && empty ($address_err)
 && empty ($phone_err) && empty ($email_err) && empty ($website_err)
@@ -555,129 +574,34 @@ if(empty($orgName_err) && empty ($contact_err) && empty ($address_err)
 && empty ($additionalNotes_err) && empty ($resourcesNeeded_err))
 {
 
-// include 'includes/library.php';
-//   $pdo = & dbconnect();
+include 'includes/library.php';
+  $pdo = & dbconnect();
 
 
   //add account details to database
-    $sql="UPDATE projectForm  SET orgName = ?, contact = ?, address = ?, phone = ?, email = ?,
+    $sql="UPDATE projectForm SET orgName = ?, contact = ?, address = ?, phone = ?, email = ?,
       website = ?, 	logoConsent = ?, orgPurpose = ?, orgYear = ?, orgEmployee = ?, approved = ?, theme = ?,
   	  projectScale = ?, projectTitle = ?, projectDescription = ?, projectTask = ?, 	projectStartDate = ?,
     	projectEndDate = ?, researchEthics1 = ?, researchEthics2 = ?, researchEthics3 = ?, projectImplementation = ?, 	screeningReq1 = ?, screeningReq2 = ?, additionalSkills = ?,
-    	resourcesNeeded = ?, fundingNeeded = ?,	additionalNotes = ?, photoLink = ? WHERE id = ?;";
+    	resourcesNeeded = ?, fundingNeeded = ?,	additionalNotes = ?, photoLink = ?) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+    $stmt= $pdo->prepare($sql);
+    $stmt ->execute([$orgName, $contact, $address, $phone, $email,
+      $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $approved, $theme,
+  	  $projectScale, $projectTitle, $projectDescription, $projectTask, 	$projectStartDate,
+    	$projectEndDate, $researchEthics1, $researchEthics2, $researchEthics3, $projectImplementation, $screeningReq1, $screeningReq2, $additionalSkills,
+    	$resourcesNeeded, $fundingNeeded,	$additionalNotes, $photoLink]);
 
-      if($stmt = mysqli_prepare($link,$sql)){
 
-        $id = null;
-        //BInd parameters
-        mysqli_stmt_bind_param($stmt, "ssssssssssssssssssssssssssssss", $orgName, $contact, $address, $phone, $email,
-          $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $approved, $theme,
-          $projectScale, $projectTitle, $projectDescription, $projectTask, 	$projectStartDate,
-          $projectEndDate, $researchEthics1, $researchEthics2, $researchEthics3, $projectImplementation, $screeningReq1, $screeningReq2, $additionalSkills,
-          $resourcesNeeded, $fundingNeeded,	$additionalNotes, $photoLink, $theid);
-
-          //Execute. If there are no problems, redirect
-          if(mysqli_stmt_execute($stmt)){
-              // Redirect to login page
-              header("location: projectformentries.php");
-          } else{ //if there are problems, resume page and print out an error message
-              echo "Something went wrong. Please try again later.";
-          }
-
-      } // end if prepare
-
-}//end if no errors
-
-mysqli_close($link);
+  echo "application submitted";
+  header("location: google.com");
 
 }
-else {
-
-  $sql = "SELECT * FROM projectForm WHERE id = $theid";
-
-  //Retrieve and store as a variable
-  if($result = $link -> query($sql)){
-    while ($row = $result -> fetch_row()){
-      $projectArray = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
-      $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
-    $row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28]);
-
-    }
-  }
 
 
 
-  $orgName = $projectArray[1];
-  $contact = $projectArray[2];
-  $address = $projectArray[3];
-  $phone = $projectArray[4];
-  $email = $projectArray[5];
-  $website = $projectArray[6];
-
-
-  $logoConsent = $projectArray[7];
-  if ($logoConsent == 1) {
-    $logoConsent = 'Yes';
-  }
-  else {
-    $logoConsent = 'No';
-  }
-
-  $orgPurpose = $projectArray[8];
-  $orgYear = $projectArray[9];
-  $orgEmployee = $projectArray[10];
-  $approved = $projectArray[11];
-
-  $theme = $projectArray[12];
-  $themeA = explode(" ", $theme);
-
-  $projectScale = $projectArray[13];
-  $projectScaleA = explode(", ", $projectScale);
-
-  $projectTitle = $projectArray[14];
-
-  $projectDescription = $projectArray[15];
-  $projectDescriptionA = explode("; ", $projectDescription);
-  $description1 = $projectDescriptionA[0];
-  $description2 = $projectDescriptionA[1];
-  $description3 = $projectDescriptionA[2];
-  $description4 = $projectDescriptionA[3];
-  $description5 = $projectDescriptionA[4];
-
-  $projectTask = $projectArray[16];
-  $projectTaskA = explode("; ", $projectTask);
 
 
 
-  $projectTask1 = $projectTaskA[0];
-  $projectTask2 = $projectTaskA[1];
-  $projectTask3 = $projectTaskA[2];
-
-
-  $projectStartDate = $projectArray[17];
-  $projectEndDate =  $projectArray[18];
-
-
-  $q1 = $projectArray[19];
-  $q2 = $projectArray[20];
-  $q3 = $projectArray[21];
-
-
-
-  $projectImplementation = $projectArray[22];
-  $projectImplementationA = explode(", ", $projectImplementation);
-
-
-  $screeningReq1 = $projectArray[23];
-  $screeningReq2 = $projectArray[24];
-
-
-
-  $additionalSkills = $projectArray[25];
-  $resourcesNeeded = $projectArray[26];
-  $fundingNeeded =	$projectArray[27];
-  $additionalNotes = $projectArray[28];
-  //$photoLink = $projectArray[29];
 
 
 }
@@ -727,6 +651,8 @@ else {
           <link rel="stylesheet" type="text/css" href="css/stud_form.css">
           <link rel="stylesheet" type="text/css" href="css/proj_form.css">
         <!--===============================================================================================-->
+
+
 
 
   </head>
@@ -914,7 +840,7 @@ else {
     <span class="help-block"><?php echo $projectScale_err; ?></span>
     <div class="block">
       <label for="scale1">It’s a single/discreet project</label>
-      <input type="checkbox" name="scale1" id="scale1" value="Its a single/discreet project"  <?php if(in_array("Its a single/discreet project", $projectScaleA)) echo 'checked = \'checked\''?>>
+      <input type="checkbox" name="scale1" id="scale1" value="It’s a single/discreet project"  <?php if(in_array("It’s a single/discreet project", $projectScaleA)) echo 'checked = \'checked\''?>>
     </div>
 
     <div class="block">
@@ -924,12 +850,12 @@ else {
 
     <div class="block">
       <label for="scale3">It’s a single year project</label>
-      <input type="checkbox" name="scale3" id="scale3" value="Its a single year project"<?php if(in_array("Its a single year project", $projectScaleA)) echo 'checked = \'checked\''?>>
+      <input type="checkbox" name="scale3" id="scale3" value="It’s a single year project"<?php if(in_array("It’s a single year project", $projectScaleA)) echo 'checked = \'checked\''?>>
     </div>
 
     <div class="block">
       <label for="scale4">It’s a multi-year project</label>
-      <input type="checkbox" name="scale4" id="scale4" value="Its a multi-year project"  <?php if(in_array("Its a multi-year project", $projectScaleA)) echo 'checked = \'checked\''?>>
+      <input type="checkbox" name="scale4" id="scale4" value="It’s a multi-year project"  <?php if(in_array("It’s a multi-year project", $projectScaleA)) echo 'checked = \'checked\''?>>
     </div>
 
     <div class="block">
@@ -1153,9 +1079,9 @@ else {
   <label> a) Does the research involve human subjects? (e.g. surveys, interviews)</label>
   <div>
       <label for="q1Y">Yes:</label>
-      <input type="radio" name="q1" id="q1Yes" value="Research invovles human subjects" <?php if($q1 == 1) echo 'checked = \'checked\''?>>
+      <input type="radio" name="q1" id="q1Yes" value="Research invovles human subjects" <?php if($q1 == 'Research invovles human subjects') echo 'checked = \'checked\''?>>
       <label for="q1No">No:</label>
-      <input type="radio" name="q1" id="q1No" value="Research does not invovle human subjects" <?php if($q1 == 0) echo 'checked = \'checked\''?>>
+      <input type="radio" name="q1" id="q1No" value="Research does not invovle human subjects" <?php if($q1 == 'Research does not invovle human subjects') echo 'checked = \'checked\''?>>
       <p class="note"><i>NOTE:  If yes, the project may be required to submit an application for ethical review of the research.
          This process may take up to 4-6 weeks and will need to be taken into consideration when creating project timelines.</i></p>
          <span class="help-block"><?php echo $researchEthics_err1; ?></span>
@@ -1170,9 +1096,9 @@ else {
 
     <div>
       <label for="q2Y">Yes:</label>
-      <input type="radio" name="q2" id="q2Yes" value="Yes, I want access to the raw data at the end of the project" <?php if($q2 == 1) echo 'checked = \'checked\''?> >
+      <input type="radio" name="q2" id="q2Yes" value="Yes, I want access to the raw data at the end of the project" <?php if($q2 == 'Yes, I want access to the raw data at the end of the project') echo 'checked = \'checked\''?> >
       <label for="q2No">No:</label>
-      <input type="radio" name="q2" id="q2No" value="No, I dont want access to the raw data at the end of the project" <?php if($q2 == 0) echo 'checked = \'checked\''?>>
+      <input type="radio" name="q2" id="q2No" value="No, I dont want access to the raw data at the end of the project" <?php if($q2 == 'No, I dont want access to the raw data at the end of the project') echo 'checked = \'checked\''?>>
       <label for="q2IfYes">If yes, please explain:</label>
       <input type="text" name="q2IfYes" id="q2IfYes" value=""> <p id="re2"></p>
       <span class="help-block"><?php echo $researchEthics_err2; ?></span>
@@ -1186,9 +1112,9 @@ else {
 
     <div>
       <label for="q3Y">Yes:</label>
-      <input type="radio" name="q3" id="q3Yes" value="Yes, lead had policies about research ethics approval." <?php if($q3 == 1) echo 'checked = \'checked\''?> >
+      <input type="radio" name="q3" id="q3Yes" value="Yes, lead had policies about research ethics approval." <?php if($q3 == 'Yes, lead had policies about research ethics approval.') echo 'checked = \'checked\''?> >
       <label for="q3No">No:</label>
-      <input type="radio" name="q3" id="q3No" value="No policies about research ethics approval" <?php if($q3 == 0) echo 'checked = \'checked\''?> >
+      <input type="radio" name="q3" id="q3No" value="No policies about research ethics approval" <?php if($q3 == 'No policies about research ethics approval') echo 'checked = \'checked\''?> >
       <label for="q3IfYes">If yes, please explain:</label>
       <input type="text" name="q3IfYes" id="q3IfYes" value=""> <p id="re3"></p>
       <span class="help-block"><?php echo $researchEthics_err3; ?></span>
@@ -1215,9 +1141,9 @@ else {
 
     <div>
       <label for="screeningQ1Y">Yes:</label>
-      <input type="radio" name="screeningQ1" id="screeningQ1Yes" value="Yes, the students require specific training." <?php if($screeningReq1 == 1) echo 'checked = \'checked\''?>>
+      <input type="radio" name="screeningQ1" id="screeningQ1Yes" value="Yes, the students require specific training." <?php if($screeningQ1 == 'Yes, the students require specific training.') echo 'checked = \'checked\''?>>
       <label for="screeningQ1No">No:</label>
-      <input type="radio" name="screeningQ1" id="screeningQ1No" value="No, I dont want require specific tranining."  <?php if($screeningReq1 == 0) echo 'checked = \'checked\''?>>
+      <input type="radio" name="screeningQ1" id="screeningQ1No" value="No, I dont want require specific tranining."  <?php if($screeningQ1 == 'No, I dont want require specific tranining.') echo 'checked = \'checked\''?>>
       <label for="screeningQ1IfYes">If yes, please explain:</label>
       <input type="text" name="screeningQ1IfYes" id="screeningQ1IfYes" value=""> <p id="screeningReqError"></p>
       <span class="help-block"><?php echo $screeningReq_err1; ?></span>
@@ -1230,9 +1156,9 @@ else {
 
     <div>
       <label for="screeningQ2Y">Yes:</label>
-      <input type="radio" name="screeningQ2" id="screeningQ2Yes" value="Yes, the students will be conducting research on site, or working with valuable equipment." <?php if($screeningReq2 == 1) echo 'checked = \'checked\''?> >
+      <input type="radio" name="screeningQ2" id="screeningQ2Yes" value="Yes, the students will be conducting research on site, or working with valuable equipment." <?php if($screeningQ2 == 'Yes, the students will be conducting research on site, or working with valuable equipment.') echo 'checked = \'checked\''?> >
       <label for="screeningQ2No">No:</label>
-      <input type="radio" name="screeningQ2" id="screeningQ2No" value="No, the students wont be conducting research on site, or working with valuable equipment." <?php if($screeningReq2 == 0) echo 'checked = \'checked\''?>>
+      <input type="radio" name="screeningQ2" id="screeningQ2No" value="No, the students wont be conducting research on site, or working with valuable equipment." <?php if($screeningQ2 == 'No, the students wont be conducting research on site, or working with valuable equipment.') echo 'checked = \'checked\''?>>
       <label for="screeningQ2IfYes">If yes, please attach proof of insurance.</label>
       <input type="text" name="screeningQ2IfYes" id="screeningQ2IfYes" value="">
       <span class="help-block"><?php echo $screeningReq_err2; ?></span>
@@ -1257,7 +1183,7 @@ else {
 
 <div>
   <label for="resourcesNeeded">a)	What resources are needed and in place to support the research – financial or otherwise? </label>
-  <input type="text" name="resourcesNeeded" id="createResourcesNeeded" value="<?php echo $resourcesNeeded; ?>"> <p id="resourcesNeededError"></p>
+  <input type="text" name="resourcesNeeded" id="createResourcesNeeded" value=""> <p id="resourcesNeededError"></p>
   <span class="help-block"><?php echo $resourcesNeeded_err; ?></span>
 </div>
 
@@ -1272,7 +1198,7 @@ else {
 
 <div>
   <label for="fundingNeeded">b)	Do you anticipate needing funding or other types of resources? If so, please explain (including any ideas on where resourcing may be obtained):</label>
-  <input type="text" name="fundingNeeded" id="createFundingNeeded" value="<?php echo $fundingNeeded; ?>"> <p id="fundingNeededError"></p>
+  <input type="text" name="fundingNeeded" id="createFundingNeeded" value=""> <p id="fundingNeededError"></p>
   <p class="note"><i>	NOTE: All known and needed resources should be listed here
      (e.g. for project coordination, data collection and analysis, software, hardware, photocopying, office supplies, workspace,
       computer, phone, travel expenses, food and refreshments, training, etc.). </i></p>
@@ -1296,7 +1222,7 @@ else {
 
 <div>
   <label for="additionalNotes"></label>
-  <input type="text" name="additionalNotes" id="createAdditionalNotes" value="<?php echo $additionalNotes; ?>"> <p id="additionalNotesError"></p>
+  <input type="text" name="additionalNotes" id="createAdditionalNotes" value=""> <p id="additionalNotesError"></p>
   <span class="help-block"><?php echo $additionalNotes_err; ?></span>
 </div>
 
@@ -1314,13 +1240,13 @@ else {
 
 <div>
   <label for="photoLink"></label>
-  <input type="file" name="photoLink" id="createPhotoLink" value="<?php echo $photoLink; ?>"> <p id="photoLinkError"></p>
+  <input type="file" name="photoLink" id="createPhotoLink" value=""> <p id="photoLinkError"></p>
 </div>
 
 
     <div>
       <label for="additionalSkills">Additional Skills:</label>
-      <input type="text" name="additionalSkills" id="createAdditionalSkills" value="<?php echo $additionalSkills; ?>"> <p id="additionalSkillsError"></p>
+      <input type="text" name="additionalSkills" id="createAdditionalSkills" value=""> <p id="additionalSkillsError"></p>
     </div>
 
 
