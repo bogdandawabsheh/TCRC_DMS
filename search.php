@@ -272,6 +272,11 @@ if($_SESSION['variableType'] == 'id'){
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+
+
+
+
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
@@ -297,6 +302,9 @@ if($_SESSION['variableType'] == 'id'){
           </div>
         </div>
         <div class="container-fluid">
+
+
+
 	<div class="row">
 		<div class="col-md-10">
 			<div class="row">
@@ -306,22 +314,22 @@ if($_SESSION['variableType'] == 'id'){
 			</div>
 			<div class="row">
 				<div class="col-sm-2">
-          <input type="checkbox" class="check" value="all" checked> All</input>
+          <input type="checkbox" id="cbAll" class="check" value="all" onclick="checkAll()"> All</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" class="check" value="project"> Project</input>
+          <input type="checkbox" id="cbProject" class="check" value="project" onclick="checkProject()"> Project</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" class="check" value="student"> Student</input>
+          <input type="checkbox" id="cbStudent" class="check" value="student" onclick="checkStudent()"> Student</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" class="check" value="faculty"> Faculty</input>
+          <input type="checkbox" id="cbFaculty" class="check" value="faculty" onclick="checkFaculty()"> Faculty</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" class="check" value="contact"> Contacts</input>
+          <input type="checkbox" id="cbContact" class="check" value="contact" onclick="checkContacts()" > Contacts</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" class="check" value="hostOrg"> Host Organizations</input>
+          <input type="checkbox" id="cbHost" class="check" value="hostOrg" onclick="checkHost()" > Host Organizations</input>
 				</div>
 			</div>
 		</div>
@@ -346,7 +354,7 @@ if($_SESSION['variableType'] == 'id'){
           <!-- Main content -->
           <section class="content">
               <div class="row">
-                <div class="col-6">
+                <div id="student" class="col-6">
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title">Student search (<?php if(is_a($tableStudent,"mysqli_result")) echo mysqli_num_rows($tableStudent)?> results)</h3>
@@ -378,7 +386,7 @@ if($_SESSION['variableType'] == 'id'){
                 </div>
               </div>
 
-                <div class="col-6">
+                <div id="project" class="col-6">
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title">Project search (<?php if(is_a($tableProject,"mysqli_result")) echo mysqli_num_rows($tableProject); else echo 0;?> results)</h3>
@@ -412,7 +420,7 @@ if($_SESSION['variableType'] == 'id'){
               </div>
             </div>
                 <div class="row">
-                <div class="col-4">
+                <div id="faculty" class="col-4">
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title">Faculty search (<?php if(is_a($tableFaculty,"mysqli_result")) echo mysqli_num_rows($tableFaculty); else echo 0;?> results)</h3>
@@ -441,7 +449,10 @@ if($_SESSION['variableType'] == 'id'){
                   </table>
                 </div>
               </div>
-                <div class="col-8">
+
+
+
+                <div id="host" class="col-8">
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title">Host search (<?php if(is_a($tableHost,"mysqli_result")) echo mysqli_num_rows($tableHost); else echo 0;?> results)</h3>
@@ -481,9 +492,12 @@ if($_SESSION['variableType'] == 'id'){
                   </table>
                 </div>
               </div>
+
+
+
             </div>
               <div class="row">
-                <div class="col-12">
+                <div id="contact" class="col-12">
                   <div class="card">
                     <div class="card-header">
                       <h3 class="card-title">Contact search (<?php if(is_a($tableContact,"mysqli_result")) echo mysqli_num_rows($tableContact); else echo 0;?> results)</h3>
@@ -548,6 +562,9 @@ if($_SESSION['variableType'] == 'id'){
       <script src="dist/js/adminlte.min.js"></script>
       <!-- AdminLTE for demo purposes -->
       <script src="dist/js/demo.js"></script>
+      <!-- Filtering JS File -->
+  <!--    <script src="js/search.js"></script> -->
+
       <script>
         $(function () {
           $(".example1").DataTable({
@@ -561,7 +578,110 @@ if($_SESSION['variableType'] == 'id'){
             "info": true,
             "autoWidth": true,
           });
+
         });
       </script>
+
+
+
+
+  <!-- Filtering Script -->
+
+<script>
+
+//check if student box is checked
+function checkStudent() {
+
+  var checkbox = document.getElementById("cbStudent");
+  var content = document.getElementById("student");
+
+  if (checkbox.checked == true) {
+     content.style.display = "block";
+   } else {
+     content.style.display = "none";
+   }
+}
+
+//check if project box is checked
+function checkProject() {
+  var checkbox = document.getElementById("cbProject");
+  var content = document.getElementById("project");
+
+  if (checkbox.checked == true) {
+     content.style.display = "block";
+   } else {
+     content.style.display = "none";
+   }
+}
+
+
+//check if faculty box is checked
+function checkFaculty() {
+  var checkbox = document.getElementById("cbFaculty");
+  var content = document.getElementById("faculty");
+
+  if (checkbox.checked == true) {
+     content.style.display = "block";
+   } else {
+     content.style.display = "none";
+   }
+}
+
+//check if host box is checked
+function checkHost() {
+  var checkbox = document.getElementById("cbHost");
+  var content = document.getElementById("host");
+
+  if (checkbox.checked == true) {
+     content.style.display = "block";
+   } else {
+     content.style.display = "none";
+   }
+}
+
+//check if contacts box is checked
+function checkContacts() {
+  var checkbox = document.getElementById("cbContact");
+  var content = document.getElementById("contact");
+
+  if (checkbox.checked == true) {
+     content.style.display = "block";
+   } else {
+     content.style.display = "none";
+   }
+}
+
+//check if the "all" box is checked
+function checkAll() {
+  var checkbox = document.getElementById("cbAll");
+  var box1 = document.getElementById("cbProject");
+  var box2 = document.getElementById("cbStudent");
+  var box3 = document.getElementById("cbFaculty");
+  var box4 = document.getElementById("cbContact");
+  var box5 = document.getElementById("cbHost");
+
+  if (checkbox.checked == true) {
+     box1.checked = true;
+     box2.checked = true;
+     box3.checked = true;
+     box4.checked = true;
+     box5.checked = true;
+     checkProject();
+     checkStudent();
+     checkFaculty();
+     checkContacts();
+     checkHost();
+   } else {
+     checkProject();
+     checkStudent();
+     checkFaculty();
+     checkContacts();
+     checkHost();
+   }
+}
+
+</script>
+
+
     </body>
   </html>
