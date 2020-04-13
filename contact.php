@@ -2,10 +2,18 @@
 // Initialize the session
 session_start();
 
-$projectArray = array();
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+//Perform access control measures (flags, login)
+include 'includes/accesscontrol.php';
+
+$projectArray = array(); //Initialize variables
 $counter = 0;
 
-require_once "config.php";
+require_once "config.php"; //establish database connection
 //Retrieve the list of currently approved but not yet begun projects
 $sql = "SELECT * FROM contact";
 
@@ -55,7 +63,7 @@ if($result = $link -> query($sql)){
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -69,13 +77,21 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Contacts Data Table</h3>
+              <button onclick = "location = 'addcontact.php';" class='btn btn-secondary'>Add new contact</button>
+              <?php include 'addlink.php';?>
+              <?php include 'removelink.php';?>
+              <?php include 'departmentControl.php';?>
+              <?php include 'regionControl.php';?>
+              <?php include 'institutionControl.php';?>
+              <?php include 'studentskillsControl.php';?>
+              <?php include 'researchThemeControl.php';?>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                  <th>View</th>
                   <th>id</th>
                   <th>Title</th>
                   <th>First Name</th>
@@ -94,19 +110,21 @@ if($result = $link -> query($sql)){
                 </thead>
                 <tbody>
                   <?php
-                  for($i = 0; $i < $counter; $i++){
+                  for($i = 0; $i < count($projectArray); $i++){
                   ?>
                   <tr>
                   <?php
-                    echo "<td>{$projectArray[$i]['0']}</td>";
+                    //Loop and print out the contents of the contact table
+                    echo "<td><a href='contactprofile.php?id={$projectArray[$i]['0']}' style='color:red'>View</a></td>";
+                    echo "<td><a href='search.php?id={$projectArray[$i]['0']}'>{$projectArray[$i]['0']}</a></td>";
                     echo "<td>{$projectArray[$i]['1']}</td>";
-                    echo "<td>{$projectArray[$i]['2']}</td>";
-                    echo "<td>{$projectArray[$i]['3']}</td>";
-                    echo "<td>{$projectArray[$i]['4']}</td>";
-                    echo "<td>{$projectArray[$i]['5']}</td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['2']}'>{$projectArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['3']}'>{$projectArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['4']}'>{$projectArray[$i]['4']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['5']}'>{$projectArray[$i]['5']}</a></td>";
                     echo "<td>{$projectArray[$i]['6']}</td>";
                     echo "<td>{$projectArray[$i]['7']}</td>";
-                    echo "<td>{$projectArray[$i]['8']}</td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['8']}'>{$projectArray[$i]['8']}</a></td>";
                     echo "<td>{$projectArray[$i]['9']}</td>";
                     echo "<td>{$projectArray[$i]['10']}</td>";
                     echo "<td>{$projectArray[$i]['11']}</td>";
@@ -120,6 +138,7 @@ if($result = $link -> query($sql)){
                 </tbody>
                 <tfoot>
                 <tr>
+                  <th>View</th>
                   <th>id</th>
                   <th>Title</th>
                   <th>First Name</th>

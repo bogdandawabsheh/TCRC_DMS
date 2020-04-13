@@ -2,6 +2,14 @@
 // Initialize the session
 session_start();
 
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
 $projectArray = array();
 $counter = 0;
 
@@ -56,7 +64,7 @@ if($result = $link -> query($sql)){
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -80,6 +88,7 @@ if($result = $link -> query($sql)){
                   <th>id</th>
                   <th>office</th>
                   <th>research</th>
+                  <th>projectTitle</th>
                   <th>projectTitle</th>
                   <th>projectDescription</th>
                   <th>DepartmentalCode</th>
@@ -114,6 +123,41 @@ if($result = $link -> query($sql)){
                 <tbody>
                   <?php
                   for($i = 0; $i < $counter; $i++){
+
+                    //approved
+                    if ($projectArray[$i]['10'] == 1) {
+                      $projectArray[$i]['10'] = "Yes";
+                    }
+                    else if ($projectArray[$i]['10'] == 0) {
+                      $projectArray[$i]['10'] = "No";
+                    }
+
+                    //signedRPA
+                    if ($projectArray[$i]['11'] == 1) {
+                      $projectArray[$i]['11'] = "Yes";
+                    }
+                    else if ($projectArray[$i]['11'] == 0) {
+                      $projectArray[$i]['11'] = "No";
+                    }
+
+                    //WEPA
+                    if ($projectArray[$i]['12'] == 1) {
+                      $projectArray[$i]['12'] = "Yes";
+                    }
+                    else if ($projectArray[$i]['12'] == 0) {
+                      $projectArray[$i]['12'] = "No";
+                    }
+
+                    //courseReq
+                    if ($projectArray[$i]['17'] == 1) {
+                      $projectArray[$i]['17'] = "Yes";
+                    }
+                    else if ($projectArray[$i]['17'] == 0) {
+                      $projectArray[$i]['17'] = "No";
+                    }
+
+
+
                   ?>
                   <tr>
                   <?php

@@ -1,6 +1,14 @@
 <?php
 // Initialize the session
 session_start();
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
 $id = $firstName = $lastName = $studentNum = $email = $street = $city =  $province = "";
 $pcode = $phone = $notes = $leftTrent = $major = $credAchieved = $cummuAchieved = $exempt = "";
 $altAddress = $altEmail = $altPhone = $yearCreated = $institutionID = $foreignStatus = $showAsFellow = $fellowType = "";
@@ -9,7 +17,15 @@ $firstName_err = $lastName_err = $studentNum_err = $email_err = $street_err = $c
 $pcode_err = $phone_err = $notes_err = $leftTrent_err = $major_err = $credAchieved_err = $cummuAchieved_err = $exempt_err = "";
 $altAddress_err = $altEmail_err = $altPhone_err = $yearCreated_err = $institutionID_err = $foreignStatus_err = $showAsFellow_err = $fellowType_err = "";
 
+
 $counter = 0;
+$projectArray = array();
+$studentSkillsArray = array();
+$tableStudentProject = "";
+$tableStudentStudentSkills = "";
+$tableProject = "";
+
+
 
 require_once "config.php";
 //Retrieve the list of currently approved but not yet begun projects
@@ -24,146 +40,226 @@ elseif (isset($_SESSION["id"])){
 } else {
   $message = "No GET/POST found. Ensure you are accessing correctly.";
   echo "<script type='text/javascript'>alert('$message');</script>";
-  header("location: index1.php");
+  header("location: index.php");
 }
 
+
+
+
+//======================================
+$sql ="SELECT studentSkills.name,studentStudentSkills.studentID,studentStudentSkills.studentSkillsID
+        FROM (studentStudentSkills INNER JOIN studentSkills ON studentSkills.id = studentStudentSkills.studentSkillsID) WHERE studentStudentSkills.studentID = {$requestedID}";
+//Retrieve and store as a variable
+$counter=1;
+$linkedStudentID='';
+if($result = $link -> query($sql)){
+  while ($row = $result -> fetch_row()){
+      $studentSkillsArray[$counter] = $row[0];
+    $counter++;
+  }
+}
+//==================================
+$counter = 0;
+$sql = "SELECT * FROM studentProject WHERE studentID = ".$_SESSION["id"];
+
+  if($tableStudentProject = mysqli_query($link,$sql)){
+    //success
+  } else {
+    echo "Error at execution";
+  }
+
+
+$linkedProject = "";
+
+  if(is_a($tableStudentProject,"mysqli_result")){
+  while( $row = mysqli_fetch_assoc($tableStudentProject)){
+
+   $linkedProject = $row["projectID"];
+
+   $sql = "SELECT * FROM project WHERE id = ".$linkedProject;
+
+     if($tableProject = mysqli_query($link,$sql)){
+       //success
+       if ($row = mysqli_fetch_assoc($tableProject)) {
+         $projectArray[$counter] =  array($row["id"], $row["projectTitle"], $row["projectNumber"], $row["staffCode"], $row["status"]);
+       }
+
+     } else {
+       echo "Error at execution";
+     }
+
+  $counter++;
+  }
+}
+
+
+
+
+
+//if user submits form
 if($_SERVER['REQUEST_METHOD'] == "POST"){
   if(null ==(trim($_POST['first_name']))){
     $firstName_err = "Please enter the first name";
   } else {
-    $firstName = trim($_POST["first_name"]);
+    $firstName = filter_var($_POST["first_name"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['last_name']))){
     $lastName_err = "Please enter the last name";
   } else {
-    $lastName = trim($_POST["last_name"]);
+    $lastName = filter_var($_POST["last_name"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['studentNum']))){
     $studentNum_err = "Please enter your student number";
   } else {
-    $studentNum = trim($_POST["studentNum"]);
+    $studentNum = filter_var($_POST["studentNum"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['email']))){
     $email_err = "Please enter the email";
   } else {
-    $email = trim($_POST["email"]);
+    $email = filter_var($_POST["email"],FILTER_SANITIZE_EMAIL);
+      if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+        $email_err = "Invalid Email entry at workEmail";
+        $email = "";
+      }
   }
 
   if(null ==(trim($_POST['street']))){
      $street_err = "Please enter street";
   } else {
-     $street = trim($_POST["street"]);
+     $street = filter_var($_POST["street"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['city']))){
   $city_err   = "Please enter the city";
   } else {
-    $city = trim($_POST["city"]);
+    $city = filter_var($_POST["city"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['province']))){
     $province_err = "No province enterred";
   } else {
-    $province = trim($_POST["province"]);
+    $province = filter_var($_POST["province"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['pcode']))){
     $pcode_err = "Please enter the postal code";
   } else {
-    $pcode = trim($_POST["pcode"]);
+    $pcode = filter_var($_POST["pcode"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['phone']))){
     $phone_err = "Please enter your phone";
   } else {
-    $phone = trim($_POST["phone"]);
+    $phone = filter_var($_POST["phone"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['notes']))){
     $notes_err = "Please enter the notes";
   } else {
-    $notes = trim($_POST["notes"]);
+    $notes = filter_var($_POST["notes"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['leftTrent']))){
     $leftTrent_err = "Please select whether the student has leftTrent";
   } else {
-    $leftTrent = trim($_POST["leftTrent"]);
+    if(filter_var($_POST["leftTrent"],FILTER_VALIDATE_INT) || $_POST["leftTrent"] == 0)
+      $leftTrent = $_POST["leftTrent"];
+    else
+      $leftTrent_err = "Error at leftTrent entry. Number expected";
   }
 
   if(null ==(trim($_POST['major']))){
     $major_err = "Please enter major";
   } else {
-    $major = trim($_POST["major"]);
+    $major = filter_var($_POST["major"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['credAchieved']))){
     $credAchieved_err = "Selection required";
   } else {
-    $credAchieved = trim($_POST["credAchieved"]);
+    if(filter_var($_POST["credAchieved"],FILTER_VALIDATE_INT) || $_POST["credAchieved"] == 0)
+      $credAchieved = $_POST["credAchieved"];
+    else
+      $credAchieved_err = "Error at credAchieved entry. Number expected";
   }
 
   if(null ==(trim($_POST['cummuAchieved']))){
     $cummuAchieved_err = "Selection required";
   } else {
-    $cummuAchieved = trim($_POST["cummuAchieved"]);
+    if(filter_var($_POST["cummuAchieved"],FILTER_VALIDATE_INT) || $_POST["cummuAchieved"] == 0)
+      $cummuAchieved = $_POST["cummuAchieved"];
+    else
+      $cummuAchieved_err = "Error at cummuAchieved entry. Number expected";
   }
 
   if(null ==(trim($_POST['exempt']))){
     $exempt_err = "Selection required";
   } else {
-    $exempt = trim($_POST["exempt"]);
+    if(filter_var($_POST["exempt"],FILTER_VALIDATE_INT) || $_POST["exempt"] == 0)
+      $exempt = $_POST["exempt"];
+    else
+      $exempt_err = "Error at exempt entry. Number expected";
   }
 
   if(null ==(trim($_POST['altAddress']))){
     $altAddress_err = "select alternative address";
   } else {
-    $altAddress = trim($_POST["altAddress"]);
+    $altAddress = filter_var($_POST["altAddress"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['altEmail']))){
     $altEmail_err = "Enter alternative email";
   } else {
-    $altEmail = trim($_POST["altEmail"]);
+    $altEmail = filter_var($_POST["altEmail"],FILTER_SANITIZE_EMAIL);
+      if(!filter_var($altEmail,FILTER_VALIDATE_EMAIL)){
+        $altEmail_err = "Invalid altEmail entry at workEmail";
+        $altEmail = "";
+      }
   }
 
   if(null ==(trim($_POST['altPhone']))){
     $altPhone_err = "Enter Alternative Phone";
   } else {
-    $altPhone = trim($_POST["altPhone"]);
+    $altPhone = filter_var($_POST["altPhone"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['yearCreated']))){
     $yearCreated_err = "Year added not selected";
   } else {
-    $yearCreated= trim($_POST["yearCreated"]);
+    $yearCreated= filter_var($_POST["yearCreated"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['institutionID']))){
     $institutionID_err = "Enter institutionID";
   } else {
-    $institutionID = trim($_POST["institutionID"]);
+    if(filter_var($_POST["institutionID"],FILTER_VALIDATE_INT) || $_POST["institutionID"] == 0)
+      $institutionID = $_POST["institutionID"];
+    else
+      $institutionID_err = "Error at institutionID entry. Number expected";
   }
 
   if(null ==(trim($_POST['foreignStatus']))){
     $foreignStatus_err = "Enter student status";
   } else {
-    $foreignStatus = trim($_POST["foreignStatus"]);
+    $foreignStatus = filter_var($_POST["foreignStatus"],FILTER_SANITIZE_STRING);
   }
 
   if(null ==(trim($_POST['showAsFellow']))){
     $showAsFellow_err = "Select show as fellow?";
   } else {
-    $showAsFellow = trim($_POST["showAsFellow"]);
+    if(filter_var($_POST["showAsFellow"],FILTER_VALIDATE_INT) || $_POST["showAsFellow"] == 0)
+      $showAsFellow = $_POST["showAsFellow"];
+    else
+      $showAsFellow_err = "Error at showAsFellow entry. Number expected";
   }
 
   if(null ==(trim($_POST['fellowType']))){
     $fellowType_err = "Fellow type not inserted";
   } else {
-    $fellowType = trim($_POST["fellowType"]);
+    $fellowType = filter_var($_POST["fellowType"],FILTER_SANITIZE_STRING);
   }
 
   if(empty($firstName_err)
@@ -243,7 +339,7 @@ if(isset($requestedID)){
         $foreignStatus = $row['foreignStatus'];
         $showAsFellow = $row['showAsFellow'];
         $fellowType = $row['fellowType'];
-}
+      }
     }
 }
 
@@ -283,11 +379,12 @@ if(isset($requestedID)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Student Profile</h1>
+            <h1><?php echo $firstName ?> <?php echo $lastName ?></h1>
+              <h5 style="color:red;">Field's with a * are required for submission!</h5>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -298,234 +395,52 @@ if(isset($requestedID)){
     <!-- Main content -->
     <section class="content">
 
-      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <div class="form group <?php echo (!empty($firstName_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group first-name">
-            <p>First Name</p>
-            <input type="text" name="first_name" class="form-control" value="<?php echo $firstName; ?>">
+
+      <?php include 'includes/studentprofile.php'; ?>
+      <div class="row">
+        <div class="col-6">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Linked Student Skills(<?php echo count($studentSkillsArray)?> results)</h3>
+              </div>
+            </div>
+            <div class="card-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                <?php
+
+                for ($i=1; $i < count($studentSkillsArray)+1; $i++) {
+                  // code...
+                  echo "<tr>";
+                    echo "<td>{$studentSkillsArray[$i]}</td>";
+                    echo "</tr>";
+                 }?>
+              </tbody>
+            </table>
           </div>
-          <span class="help-block"><?php echo $firstName_err; ?></span>
+
         </div>
 
-        <div class="form group <?php echo (!empty($lastName_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group last-name">
-            <p>Last Name</p>
-            <input type="text" name="last_name" class="form-control" value="<?php echo $lastName; ?>">
-          </div>
-          <span class="help-block"><?php echo $lastName_err; ?></span>
-        </div>
+      <?php include 'includes/linkedproject.php'; ?>
+    </div>
 
-        <div class="form group <?php echo (!empty($studentNum_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group studentNum">
-            <p>Student Number</p>
-            <input type="text" name="studentNum" class="form-control" value="<?php echo $studentNum; ?>">
-          </div>
-          <span class="help-block"><?php echo $studentNum_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($email_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group email">
-            <p>Email</p>
-            <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
-          </div>
-          <span class="help-block"><?php echo $email_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($street_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group street">
-            <p>Street</p>
-            <input type="text" name="street" class="form-control" value="<?php echo $street; ?>">
-          </div>
-          <span class="help-block"><?php echo $street_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($city_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group city">
-            <p>City</p>
-            <input type="text" name="city" class="form-control" value="<?php echo $city; ?>">
-          </div>
-          <span class="help-block"><?php echo $city_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($province_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group province">
-            <p>Province</p>
-            <input type="text" name="province" class="form-control" value="<?php echo $email; ?>">
-          </div>
-          <span class="help-block"><?php echo $province_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($pcode_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group pcode">
-            <p>Postal Code</p>
-            <input type="text" name="pcode" class="form-control" value="<?php echo $pcode; ?>">
-          </div>
-          <span class="help-block"><?php echo $pcode_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($phone_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group phone">
-            <p>Phone</p>
-            <input type="text" name="phone" class="form-control" value="<?php echo $phone; ?>">
-          </div>
-          <span class="help-block"><?php echo $phone_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($notes_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group notes">
-            <p>Notes</p>
-            <input type="text" name="notes" class="form-control" value="<?php echo $notes; ?>">
-          </div>
-          <span class="help-block"><?php echo $notes_err; ?></span>
-        </div>
 
-        <div class="form group <?php echo (!empty($leftTrent_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group leftTrent">
-            <p>Has student graduated?</p>
-            <select name = "leftTrent">
-              <option <?php if($leftTrent == '1') echo "selected";?> value = 'yes'>Yes</option>
-              <option <?php if($leftTrent == '0') echo "selected";?> value = 'no'>No</option>
-            </select>
-          </div>
-          <span class="help-block"><?php echo $leftTrent_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($major_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group major">
-            <p>Student Major</p>
-            <input type="text" name="major" class="form-control" value="<?php echo $major; ?>">
-          </div>
-          <span class="help-block"><?php echo $major_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($credAchieved_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group credAchieved">
-            <p>Has student achieved 10 credits?</p>
-            <select name = "credAchieved">
-              <option <?php if($credAchieved == '1') echo "selected";?> value = 'yes'>Yes</option>
-              <option <?php if($credAchieved == '0') echo "selected";?> value = 'no'>No</option>
-            </select>
-          </div>
-          <span class="help-block"><?php echo $credAchieved_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($cummuAchieved_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group cummuAchieved">
-            <p>Has student achieved 80%?</p>
-            <select name = "cummuAchieved">
-              <option <?php if($cummuAchieved == '1') echo "selected";?> value = 'yes'>Yes</option>
-              <option <?php if($cummuAchieved == '0') echo "selected";?> value = 'no'>No</option>
-            </select>
-          </div>
-          <span class="help-block"><?php echo $cummuAchieved_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($exempt_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group exempt">
-            <p>Is student exempt from above?</p>
-            <select name = "exempt">
-              <option <?php if($exempt == '1') echo "selected";?> value = 'yes'>Yes</option>
-              <option <?php if($exempt == '0') echo "selected";?> value = 'no'>No</option>
-            </select>
-          </div>
-          <span class="help-block"><?php echo $exempt_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($altAddress_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group altAddress">
-            <p>Alternative Address</p>
-            <input type="text" name="altAddress" class="form-control" value="<?php echo $altAddress; ?>">
-          </div>
-          <span class="help-block"><?php echo $altAddress_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($altEmail_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group altEmail">
-            <p>Alternative Email</p>
-            <input type="text" name="altEmail" class="form-control" value="<?php echo $altEmail; ?>">
-          </div>
-          <span class="help-block"><?php echo $altEmail_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($altPhone_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group altPhone">
-            <p>Alternate phone</p>
-            <input type="text" name="altPhone" class="form-control" value="<?php echo $altPhone; ?>">
-          </div>
-          <span class="help-block"><?php echo $altPhone_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($yearCreated_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group yearCreated">
-            <p>Year Created</p>
-            <input type="text" name="yearCreated" class="form-control" value="<?php echo $yearCreated; ?>">
-          </div>
-          <span class="help-block"><?php echo $yearCreated_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($institutionID_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group institutionID">
-            <p>Institution ID</p>
-            <input type="text" name="institutionID" class="form-control" value="<?php echo $institutionID; ?>">
-          </div>
-          <span class="help-block"><?php echo $institutionID_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($foreignStatus_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group foreignStatus">
-            <p>Is a foreign student:</p>
-            <select name = "foreignStatus">
-              <option <?php if($foreignStatus == 'yes') echo "selected";?> value = 'yes'>Yes</option>
-              <option <?php if($foreignStatus == 'no') echo "selected";?> value = 'no'>No</option>
-            </select>
-          </div>
-          <span class="help-block"><?php echo $foreignStatus_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($showAsFellow_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group showAsFellow">
-            <p>Show as fellow?</p>
-            <select name = "showAsFellow">
-              <option <?php if($showAsFellow == '1') echo "selected";?> value = '1'>Yes</option>
-              <option <?php if($showAsFellow == '0') echo "selected";?> value = '0'>No</option>
-            </select>
-          </div>
-          <span class="help-block"><?php echo $showAsFellow_err; ?></span>
-        </div>
-
-        <div class="form group <?php echo (!empty($fellowType_err)) ? 'has-error' : ''; ?>">
-          <span class "label inbox-info"></span>
-          <div class = "group fellowType">
-            <p>Fellow type</p>
-            <input type="text" name="fellowType" class="form-control" value="<?php echo $fellowType; ?>">
-          </div>
-          <span class="help-block"><?php echo $fellowType_err; ?></span>
-        </div>
         <div class="form-group">
           <input type="submit" class="btn btn-primary" value="Submit">
           <input type="reset" class="btn btn-default" value="Reset">
+
         </div>
       </form>
 

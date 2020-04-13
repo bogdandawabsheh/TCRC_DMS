@@ -2,6 +2,16 @@
 // Initialize the session
 session_start();
 
+
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
+
 $facultyArray = array();
 $counter = 0;
 
@@ -55,7 +65,7 @@ if($result = $link -> query($sql)){
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -69,7 +79,14 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Faculty Data Table</h3>
+              <button onclick = "location = 'addfaculty.php';" class='btn btn-secondary'>Add new faculty</button>
+              <?php include 'addlink.php';?>
+              <?php include 'removelink.php';?>
+              <?php include 'departmentControl.php';?>
+              <?php include 'regionControl.php';?>
+              <?php include 'institutionControl.php';?>
+              <?php include 'studentskillsControl.php';?>
+              <?php include 'researchThemeControl.php';?>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -85,15 +102,15 @@ if($result = $link -> query($sql)){
                 </thead>
                 <tbody>
                   <?php
-                  for($i = 0; $i < $counter; $i++){
+                  for($i = 0; $i < count($facultyArray); $i++){
                   ?>
                   <tr>
                   <?php
                     echo "<td><a href='facultyprofile.php?id={$facultyArray[$i]['0']}' style='color:red'>View</a></td>";
                     echo "<td><a href='search.php?id={$facultyArray[$i]['0']}'>{$facultyArray[$i]['0']}</a></td>";
-                    echo "<td><a href='search.php?firstName={$facultyArray[$i]['1']}'>{$facultyArray[$i]['1']}</a></td>";
-                    echo "<td><a href='search.php?lastName={$facultyArray[$i]['2']}'>{$facultyArray[$i]['2']}</a></td>";
-                    echo "<td><a href='search.php?email={$facultyArray[$i]['3']}'>{$facultyArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?all={$facultyArray[$i]['1']}'>{$facultyArray[$i]['1']}</a></td>";
+                    echo "<td><a href='search.php?all={$facultyArray[$i]['2']}'>{$facultyArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?all={$facultyArray[$i]['3']}'>{$facultyArray[$i]['3']}</a></td>";
                     ?>
                   </tr>
                   <?php

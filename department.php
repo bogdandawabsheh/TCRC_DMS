@@ -2,6 +2,13 @@
 // Initialize the session
 session_start();
 
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
 $projectArray = array();
 $counter = 0;
 
@@ -24,7 +31,7 @@ if($result = $link -> query($sql)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Contacts Data Table</title>
+  <title>Departments Data Table</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -52,11 +59,11 @@ if($result = $link -> query($sql)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Contact Datatable</h1>
+            <h1>Department Datatable</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -89,6 +96,12 @@ if($result = $link -> query($sql)){
                   ?>
                   <tr>
                   <?php
+                  if ($projectArray[$i]['2'] == 1) {
+                    $projectArray[$i]['2'] = "Trent University";
+                  }
+                  else if ($projectArray[$i]['2'] == 2) {
+                    $projectArray[$i]['2'] = "Fleming College";
+                  }
                     echo "<td>{$projectArray[$i]['0']}</td>";
                     echo "<td>{$projectArray[$i]['1']}</td>";
                     echo "<td>{$projectArray[$i]['2']}</td>";

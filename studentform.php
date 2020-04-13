@@ -2,6 +2,8 @@
 // Initialize the session
 session_start();
 
+$REDIRECT = 'thankyou.php';
+
 //Remove error reporting
 error_reporting(0);
 // Define variables and initialize with empty values
@@ -296,6 +298,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
 //If there are no errors with user input
+  var_dump($name_err,$trent_email_err
+  ,$phone_err
+  ,$stud_num_err
+  ,$college_err
+  ,$major_err
+  ,$address_err
+  ,$province_err
+  ,$city_err
+  ,$stud_status_err
+  ,$source_err
+  ,$mail_TCRC_err
+  ,$mail_ULink_err
+  ,$proj_num1_err
+  ,$proj_num2_err
+  ,$proj_num3_err
+  ,$coursecode_err
+  ,$supervisor_err
+  ,$credits_err
+  ,$dept_req_err,$cum_grade_err);#)
+
   if(empty($name_err)
   && empty ($trent_email_err)
   && empty ($phone_err)
@@ -320,7 +342,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
   {
     //Assemble an SQL query
     $sql = "INSERT INTO studentForm(id,fname, lname, tNumber, studNumber, email, college, major, address, city, province, studentStatus, notes, mailConsentTCRC, mailConsentULinks, projectInterestID, projectInterestID_2, projectInterestID_3,coursecode,facultySupervisor, CreditAchieved, CumulativeAchieved,deptPrereq)
-    VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?,?);";
+    VALUES (?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?,?,?, ?, ?,?)";
+
 
     //Prepare the query
     if($stmt = mysqli_prepare($link,$sql)){
@@ -333,8 +356,18 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       //Execute. If there are no problems, redirect
       if(mysqli_stmt_execute($stmt)){
           // Redirect to login page
-          header("location: google.com");
-      } else{ //if there are problems, resume page and print out an error message
+          $sql = "INSERT INTO student(id,firstName, lastName, studentNum, email,street, city, province, phone, major, credAchieved, cumAchieved,foreignStatus) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+          $id = null;
+          if($stmt = mysqli_prepare($link,$sql)){
+            mysqli_stmt_bind_param($stmt, "ississsssssis", $id,$fname,$lname,$stud_num,$trent_email,$address,$city,$province,$phone,$major,$credits,$cum_grade,$studentStatus);
+
+            if(mysqli_stmt_execute($stmt)){
+              header("location: $REDIRECT");
+            } else {
+              //failed to create student.
+            }
+          }
+        } else{ //if there are problems, resume page and print out an error message
           echo "Something went wrong. Please try again later.";
       }
     }
@@ -419,12 +452,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="form-group <?php echo (!empty($college_err)) ? 'has-error' : ''; ?>">
           <span class= "label inbox-info">College</span>
           <div class = "group college">
-          <input type="radio" name="college" value="Traill" class="form-control" <?php if($college == 'Traill') echo 'checked = \'checked\''?>> Traill College
-          <input type="radio" name="college" value="Champlain" class="form-control" <?php if($college == 'Champlain') echo 'checked = \'checked\''?>> Champlain College
-          <input type="radio" name="college" value="Lady_Eaton" class="form-control" <?php if($college == 'Lady_Eaton') echo 'checked = \'checked\''?>> Lady Eaton College
-          <input type="radio" name="college" value="Otanabee" class="form-control" <?php if($college == 'Otanabee') echo 'checked = \'checked\''?>> Otanabee College
-          <input type="radio" name="college" value="Gzowski" class="form-control" <?php if($college == 'Gzowski') echo 'checked = \'checked\''?>> Gzowksi College
-          <input type="radio" name="college" value="No_affiliation" class="form-control" <?php if($college == 'No_affiliation') echo 'checked = \'checked\''?>> Not affiliated
+          <input type="radio" name="college" value="Traill"  <?php if($college == 'Traill') echo 'checked = \'checked\''?>> Traill College </input>
+          <input type="radio" name="college" value="Champlain"  <?php if($college == 'Champlain') echo 'checked = \'checked\''?>> Champlain College </input>
+          <input type="radio" name="college" value="Lady_Eaton"  <?php if($college == 'Lady_Eaton') echo 'checked = \'checked\''?>> Lady Eaton College </input>
+          <input type="radio" name="college" value="Otanabee"  <?php if($college == 'Otanabee') echo 'checked = \'checked\''?>> Otanabee College </input>
+          <input type="radio" name="college" value="Gzowski"  <?php if($college == 'Gzowski') echo 'checked = \'checked\''?>> Gzowksi College </input>
+          <input type="radio" name="college" value="No_affiliation"  <?php if($college == 'No_affiliation') echo 'checked = \'checked\''?>> Not affiliated </input>
         </div>
           <span class="help-block"><?php echo $college_err; ?></span>
         </div>
@@ -456,8 +489,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="form-group <?php echo (!empty($stud_status_err)) ? 'has-error' : ''; ?>">
           <span class= "label inbox-info">Student Status</span>
           <div class = "group status">
-          <input type="radio" name="stud_status" value="international" class="form-control" <?php if($stud_status == 'international') echo 'checked = \'checked\''?>> International
-          <input type="radio" name="stud_status" value="canadian" class="form-control" <?php if($stud_status == 'canadian') echo 'checked = \'checked\''?>> Canadian
+          <input type="radio" name="stud_status" value="international"  <?php if($stud_status == 'international') echo 'checked = \'checked\''?>> International </input>
+          <input type="radio" name="stud_status" value="canadian"  <?php if($stud_status == 'canadian') echo 'checked = \'checked\''?>> Canadian </input>
         </div>
           <span class="help-block"><?php echo $stud_status_err; ?></span>
         </div>
@@ -471,8 +504,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="form-group <?php echo (!empty($mail_TCRC_err)) ? 'has-error' : ''; ?>">
           <span class= "label inbox-info">Join TCRC Mailing list?</span>
           <div class = "group mail">
-          <input type="radio" name="mail_TCRC" value="yes" class="form-control" <?php if($mail_ULink == 'yes') echo 'checked = \'checked\''?>> Yes
-          <input type="radio" name="mail_TCRC" value="no" class="form-control" <?php if($mail_ULink == 'no') echo 'checked = \'checked\''?>> No
+          <input type="radio" name="mail_TCRC" value="yes"  <?php if($mail_ULink == 'yes') echo 'checked = \'checked\''?>> Yes </input>
+          <input type="radio" name="mail_TCRC" value="no" <?php if($mail_ULink == 'no') echo 'checked = \'checked\''?>> No </input>
           </div>
           <span class="help-block"><?php echo $mail_TCRC_err; ?></span>
         </div>
@@ -480,8 +513,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="form-group <?php echo (!empty($mail_ULink_err)) ? 'has-error' : ''; ?>">
           <span class= "label inbox-info">Join ULinks Mailing list?</span>
           <div class = "group college">
-          <input type="radio" name="mail_ULink" value="yes" class="form-control" <?php if($mail_ULink == 'yes') echo 'checked = \'checked\''?>> Yes
-          <input type="radio" name="mail_ULink" value="no" class="form-control" <?php if($mail_ULink == 'no') echo 'checked = \'checked\''?>> No
+          <input type="radio" name="mail_ULink" value="yes"<?php if($mail_ULink == 'yes') echo 'checked = \'checked\''?>> Yes </input>
+          <input type="radio" name="mail_ULink" value="no" <?php if($mail_ULink == 'no') echo 'checked = \'checked\''?>> No </input>
         </div>
           <span class="help-block"><?php echo $mail_ULink_err; ?></span>
         </div>
@@ -535,8 +568,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="form-group <?php echo (!empty($credits_err)) ? 'has-error' : ''; ?>">
           <span class= "label inbox-info">Do you meet credit requirements?</span>
           <div class = "group credits">
-          <input type="radio" name="credits" value="yes" class="form-control" <?php if($credits == 'yes') echo 'checked = \'checked\''?>> Yes
-          <input type="radio" name="credits" value="no" class="form-control" <?php if($credits == 'no') echo 'checked = \'checked\''?>> No
+          <input type="radio" name="credits" value="yes"  <?php if($credits == 'yes') echo 'checked = \'checked\''?>> Yes </input>
+          <input type="radio" name="credits" value="no"  <?php if($credits == 'no') echo 'checked = \'checked\''?>> No </input>
         </div>
           <span class="help-block"><?php echo $credits_err; ?></span>
         </div>
@@ -544,8 +577,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="form-group <?php echo (!empty($cum_grade_err)) ? 'has-error' : ''; ?>">
           <span class= "label inbox-info">Do you meet average grade requirements?</span>
           <div class = "group grade">
-          <input type="radio" name="cum_grade" value="yes" class="form-control" <?php if($cum_grade == 'yes') echo 'checked = \'checked\''?>> Yes
-          <input type="radio" name="cum_grade" value="no" class="form-control" <?php if($cum_grade == 'no') echo 'checked = \'checked\''?>> No
+          <input type="radio" name="cum_grade" value="yes" <?php if($cum_grade == 'yes') echo 'checked = \'checked\''?>> Yes </input>
+          <input type="radio" name="cum_grade" value="no" <?php if($cum_grade == 'no') echo 'checked = \'checked\''?>> No </input>
           </div>
           <span class="help-block"><?php echo $cum_grade_err; ?></span>
         </div>
@@ -553,8 +586,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         <div class="form-group <?php echo (!empty($dept_req_err)) ? 'has-error' : ''; ?>">
           <span class= "label inbox-info">Do you meet departamental requirements?</span>
           <div class = "group depreq">
-          <input type="radio" name="dept_req" value="yes" class="form-control" <?php if($dept_req == 'no') echo 'checked = \'checked\''?>> Yes
-          <input type="radio" name="dept_req" value="no" class="form-control" <?php if($dept_req == 'no') echo 'checked = \'checked\''?>> No
+          <input type="radio" name="dept_req" value="yes" <?php if($dept_req == 'no') echo 'checked = \'checked\''?>> Yes </input>
+          <input type="radio" name="dept_req" value="no"  <?php if($dept_req == 'no') echo 'checked = \'checked\''?>> No </input>
           </div>
           <span class="help-block"><?php echo $dept_req_err; ?></span>
         </div>

@@ -4,7 +4,7 @@ session_start();
 
 // Check if the user is already logged in, if yes then redirect him to welcome page
 if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-  header("location: index1.php");
+  header("location: index.php");
   exit;
 }
 
@@ -35,7 +35,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     // Validate credentials
     if(empty($username_err) && empty($password_err)){
         // Prepare a select statement
-        $sql = "SELECT id, uname, password FROM users WHERE uname = ?";
+        $sql = "SELECT studentID, uname, password, Flag FROM users WHERE uname = ?";
         $stmt = "";
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
@@ -52,20 +52,32 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                 // Check if username exists, if yes then verify password
                 if(mysqli_stmt_num_rows($stmt) == 1){
                     // Bind result variables
-                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
+                    mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password, $flag);
                     if(mysqli_stmt_fetch($stmt)){
 
                         if(password_verify($password, $hashed_password)){
-                            // Password is correct, so start a new session
-                            session_start();
+
 
                             // Store data in session variables
-                            $_SESSION["loggedin"] = true;
-                            $_SESSION["id"] = $id;
-                            $_SESSION["username"] = $username;
+                            if($flag != 'C' ){
+                              $_SESSION["loggedin"] = true;
+                              $_SESSION["username"] = $username;
+                              $_SESSION['flag'] = $flag;
+                            } else if($flag == 'C' && $id != 0){
+                              $_SESSION["loggedin"] = true;
+                              $_SESSION['id'] = $id;
+                              $_SESSION["username"] = $username;
+                              $_SESSION['flag'] = $flag;
+                            } else if($flag == 'C' && $id == 0){
+                              echo '<script type="text/javascript">alert("No access. Contact an administrator to set your access");</script>';
+                            }
 
-                            // Redirect user to index1.php
-                            header("Location: index1.php");
+                            // Redirect user to index.php
+                            if($flag == "C" && $id != 0)
+                              header("Location: studentIndex.php?id=".$id);
+                            else if ($flag != "C")
+                              header("Location: index.php");
+
                         } else{
                             // Display an error message if password is not valid
                             $password_err = "The password you entered was not valid.";
@@ -144,6 +156,21 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             <br>
             <h5>Don't have an account? <a href="register.php" style= "color:white">Sign up now</a>.</h5>
         </form>
+        <?php/*
+//LDAP Connection here
+
+$ldap_dn = "uid=".$_POST["username"].",dc=example,dc=com";
+$ldap_password = $_POST["password"];
+
+$ldap_con = ldap_connect("192.168.xx.xx", 389"); //Add to your active directory protocol here
+ldap_set_option($ldap_con, LDAP_OPT_PROTOCOL_VERSION, 3);
+
+if(ldap_bind($ldap_con,$ldap_dn,$ldap_password))
+    echo "Authenticated";
+else
+    echo "Invalid Credential";
+*/?>
+
     </div>
   </div>
 </div>

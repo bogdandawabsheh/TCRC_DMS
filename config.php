@@ -1,6 +1,6 @@
 <?php
-/* Database credentials. Assuming you are running MySQL
-server with default setting (user 'root' with no password) */
+/* Database credentials. running MySQL*/
+
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'apollosoftware');
 define('DB_PASSWORD', 'cois4000Y');

@@ -2,6 +2,14 @@
 // Initialize the session
 session_start();
 
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
 $projectArray = array();
 $counter = 0;
 
@@ -18,7 +26,6 @@ if($result = $link -> query($sql)){
     $counter++;
   }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -59,7 +66,7 @@ if($result = $link -> query($sql)){
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -73,7 +80,14 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title"> Project</h3>
+              <button onclick = "location = 'addproject.php';" class='btn btn-secondary'>Add new project</button>
+              <?php include 'addlink.php';?>
+              <?php include 'removelink.php';?>
+              <?php include 'departmentControl.php';?>
+              <?php include 'regionControl.php';?>
+              <?php include 'institutionControl.php';?>
+              <?php include 'studentskillsControl.php';?>
+              <?php include 'researchThemeControl.php';?>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -96,22 +110,22 @@ if($result = $link -> query($sql)){
                 <tbody>
                   <?php
                   $_SESSION["theId"] =1;
-                  for($i = 0; $i < $counter; $i++){
+                  for($i = 0; $i < count($projectArray); $i++){
                   ?>
                   <tr>
                   <?php
                   //  echo "<td><a href='editprojectform.php'>Edit</a></td>";
                     echo "<td><a href='projectprofile.php?id={$projectArray[$i]['0']}' style='color:red'>View</a></td>";
                     echo "<td><a href='search.php?id={$projectArray[$i]['0']}'>{$projectArray[$i]['0']}</a></td>";
-                    echo "<td><a href='search.php?office={$projectArray[$i]['1']}'>{$projectArray[$i]['1']}</a></td>";
-                    echo "<td><a href='search.php?research={$projectArray[$i]['2']}'>{$projectArray[$i]['2']}</a></td>";
-                    echo "<td><a href='search.php?projectTitle={$projectArray[$i]['3']}'>{$projectArray[$i]['3']}</a></td>";
-                    echo "<td><a href='search.php?projectID={$projectArray[$i]['4']}'>{$projectArray[$i]['4']}</a></td>";
-                    echo "<td><a href='search.php?projectDesc={$projectArray[$i]['5']}'>{$projectArray[$i]['5']}</a></td>";
-                    echo "<td><a href='search.php?deptCode={$projectArray[$i]['6']}'>{$projectArray[$i]['6']}</a></td>";
-                    echo "<td><a href='search.php?deptID={$projectArray[$i]['7']}'>{$projectArray[$i]['7']}</a></td>";
-                    echo "<td><a href='search.php?dateProposed={$projectArray[$i]['8']}'>{$projectArray[$i]['8']}</a></td>";
-                    echo "<td><a href='search.php?dateReceived={$projectArray[$i]['9']}'>{$projectArray[$i]['9']}</a></td>";
+                    echo "<td>{$projectArray[$i]['1']}</td>";
+                    echo "<td>{$projectArray[$i]['2']}</td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['3']}'>{$projectArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['4']}'>{$projectArray[$i]['4']}</a></td>";
+                    echo "<td>{$projectArray[$i]['5']}</td>";
+                    echo "<td>{$projectArray[$i]['6']}</td>";
+                    echo "<td>{$projectArray[$i]['7']}</td>";
+                    echo "<td>{$projectArray[$i]['8']}</td>";
+                    echo "<td>{$projectArray[$i]['9']}</td>";
                     ?>
                   </tr>
                   <?php

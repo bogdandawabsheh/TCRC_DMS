@@ -2,6 +2,13 @@
 // Initialize the session
 session_start();
 
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+
 $projectArray = array();
 $counter = 0;
 
@@ -12,6 +19,9 @@ $sql = "SELECT * FROM projectForm";
 //Retrieve and store as a variable
 if($result = $link -> query($sql)){
   while ($row = $result -> fetch_row()){
+    if ($row[11] == 1) {
+      continue;
+    }
     $projectArray[$counter] = array($row[0],$row[1],$row[2],$row[3],$row[4],$row[5],$row[6],
     $row[7],$row[8],$row[9],$row[10],$row[11],$row[12],$row[13],$row[14],$row[15],$row[16],$row[17],$row[18],$row[19],$row[20],$row[21],
   $row[22],$row[23],$row[24],$row[25],$row[26],$row[27],$row[28],$row[29]);
@@ -73,13 +83,15 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title"> Edit Project Form</h3>
+            <!--    <h5>To approve a project:</h5><br>-->
+            <!--      <h6>Click the approve button below for the project entry you would like to approve, then edit the form by selecting yes at the approved section</h6> -->
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                  <th>Approve</th>
                   <th>Edit</th>
                   <th>id</th>
                   <th>Organization Name</th>
@@ -121,6 +133,11 @@ if($result = $link -> query($sql)){
                   <tr>
                   <?php
                   //  echo "<td><a href='editprojectform.php'>Edit</a></td>";
+
+                  if ($projectArray[$i]['11'] == 0) {
+                      $projectArray[$i]['11'] = "No";
+                  }
+                    echo "<td><a href='approveproject.php?id={$projectArray[$i]['0']}'>Approve</a></td>";
                     echo "<td><a href='editprojectform.php?id={$projectArray[$i]['0']}'>Edit</a></td>";
                     echo "<td>{$projectArray[$i]['0']}</td>";
                     echo "<td>{$projectArray[$i]['1']}</td>";
@@ -160,6 +177,7 @@ if($result = $link -> query($sql)){
                 </tbody>
                 <tfoot>
                 <tr>
+                  <th>Approve</th>
                   <th>Edit</th>
                   <th>id</th>
                   <th>Organization Name</th>

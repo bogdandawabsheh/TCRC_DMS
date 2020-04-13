@@ -6,6 +6,15 @@ $firstName_err = $lastName_err = $email_err = "";
 $facultyArray = array();
 $counter = 0;
 
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
+
 require_once "config.php";
 //Retrieve the list of currently approved but not yet begun projects
 
@@ -19,26 +28,30 @@ elseif (isset($_SESSION["id"])){
 } else {
   $message = "No GET/POST found. Ensure you are accessing correctly.";
   echo "<script type='text/javascript'>alert('$message');</script>";
-  header("location: index1.php");
+  header("location: index.php");
 }
 
 if($_SERVER['REQUEST_METHOD'] == "POST"){
   if(empty(trim($_POST['first_name']))){
     $firstName_err = "Please enter the first name";
   } else {
-    $firstName = trim($_POST["first_name"]);
+    $firstName = filter_var($_POST["first_name"],FILTER_SANITIZE_STRING);
   }
 
   if(empty(trim($_POST['last_name']))){
     $lastName_err = "Please enter the last name";
   } else {
-    $lastName = trim($_POST["last_name"]);
+    $lastName = filter_var($_POST["last_name"],FILTER_SANITIZE_STRING);
   }
 
   if(empty(trim($_POST['email']))){
     $email_err = "Please enter the email";
   } else {
-    $email = trim($_POST["email"]);
+    $email = filter_var($_POST["email"],FILTER_SANITIZE_EMAIL);
+      if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+        $email_err = "Invalid Email entry at email";
+        $email = "";
+      }
   }
 
   if(empty($firstName_err)
@@ -84,7 +97,7 @@ if(isset($requestedID)){
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Projects </title>
+  <title>Faculty </title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -113,11 +126,12 @@ if(isset($requestedID)){
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Project Profiles</h1>
+            <h1><?php echo $firstName;?> <?php echo $lastName; ?></h1>
+              <h5 style="color:red;">Field's with a '*' are required for submission!</h5>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -132,7 +146,7 @@ if(isset($requestedID)){
         <div class="form group <?php echo (!empty($firstName_err)) ? 'has-error' : ''; ?>">
           <span class "label inbox-info"></span>
           <div class = "group first-name">
-            <p>First name:</p>
+          <h3 style="color:red; display:inline">*</h3>   <p style="display:inline">First name:</p>
             <input type="text" name="first_name" class="form-control" value="<?php echo $firstName; ?>">
           </div>
           <span class="help-block"><?php echo $firstName_err; ?></span>
@@ -141,7 +155,7 @@ if(isset($requestedID)){
         <div class="form group <?php echo (!empty($lastName_err)) ? 'has-error' : ''; ?>">
           <span class "label inbox-info"></span>
           <div class = "group last-name">
-            <p>Last name:</p>
+          <h3 style="color:red; display:inline">*</h3>   <p style="display:inline">Last name:</p>
             <input type="text" name="last_name" class="form-control" value="<?php echo $lastName; ?>">
           </div>
           <span class="help-block"><?php echo $lastName_err; ?></span>
@@ -149,7 +163,7 @@ if(isset($requestedID)){
         <div class="form group <?php echo (!empty($email_err)) ? 'has-error' : ''; ?>">
           <span class "label inbox-info"></span>
           <div class = "group email">
-            <p>Email:</p>
+        <h3 style="color:red; display:inline">*</h3>     <p style="display:inline">Email:</p>
             <input type="text" name="email" class="form-control" value="<?php echo $email; ?>">
           </div>
           <span class="help-block"><?php echo $email_err; ?></span>

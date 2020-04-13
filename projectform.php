@@ -14,7 +14,10 @@ $projectStartDate_err = $projectEndDate_err = $researchEthics_err1 =$researchEth
 $additionalSkills_err = $resourcesNeeded_err = $fundingNeeded_err =	$additionalNotes_err = $photoLink_err= "";
 
 
+$projectDescription_err1;
 $projectDescription_err2 = $projectDescription_err3 = $projectDescription_err4 = $projectDescription_err5 = "";
+$checkyes = $checkno = "";
+
 
 require_once "config.php";
 
@@ -34,7 +37,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgName_err = "Please input your Organization Name.";
   } else {
     //variable declaration
-    $orgName  = trim($_POST["orgName"]);
+    $orgName  = filter_var($_POST["orgName"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -43,7 +46,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $contact_err = "Please input your Contact.";
   } else {
     //variable declaration
-    $contact  = trim($_POST["contact"]);
+    $contact  = filter_var($_POST["contact"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -52,7 +55,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $address_err = "Please input your Address.";
   } else {
     //variable declaration
-    $address  = trim($_POST["address"]);
+    $address  = filter_var($_POST["address"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -61,7 +64,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $phone_err = "Please input your Phone number.";
   } else {
     //variable declaration
-    $phone  = trim($_POST["phone"]);
+    $phone  = filter_var($_POST["phone"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -70,7 +73,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $email_err = "Please input your Email.";
   } else {
     //variable declaration
-    $email = trim($_POST["email"]);
+    $email = filter_var($_POST["email"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -79,7 +82,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $website_err = "Please input your Website.";
   } else {
     //variable declaration
-    $website = trim($_POST["website"]);
+    $website = filter_var($_POST["website"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -109,7 +112,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgPurpose_err = "Please input your Organization Purpose.";
   } else {
     //variable declaration
-    $orgPurpose = trim($_POST["orgPurpose"]);
+    $orgPurpose = filter_var($_POST["orgPurpose"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -120,7 +123,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgYear_err = "Please input your Organization Year.";
   } else {
     //variable declaration
-    $orgYear = $_POST["orgYear"];
+    $orgYear = filter_var($_POST["orgYear"],FILTER_SANITIZE_STRING);
   }
 
 
@@ -131,17 +134,10 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     $orgEmployee_err = "Please input your Organization Employee.";
   } else {
     //variable declaration
-    $orgEmployee = $_POST["orgEmployee"];
+    $orgEmployee = filter_var($_POST["orgEmployee"],FILTER_SANITIZE_STRING);
   }
 
 
-  if(empty(trim($_POST["approved"]))){
-    //error declaration
-    $approved_err = "Please input answer for this question.";
-  } else {
-    //variable declaration
-    $approved = trim($_POST["approved"]);
-  }
 
 
 
@@ -171,12 +167,8 @@ empty(trim($_POST["environmentalTheme"])) &&empty(trim($_POST["socialTheme"]))
       $themeA[] = $_POST['themeOther'];
     }
 
-    $theme = implode( " ", $themeA );
+    $theme = implode( ", ", $themeA );
   }
-
-
-
-
 
 
 
@@ -240,10 +232,6 @@ empty($_POST["scale7"]) && empty($_POST["projectScale"])){
 
 
 
-
-
-
-
    $projectDescriptionA = array();
   if(empty(trim($_POST["description1"]))){
     //error declaration
@@ -285,7 +273,7 @@ empty($_POST["scale7"]) && empty($_POST["projectScale"])){
   }
 
 
-    $projectDescription = implode( "; ", $projectDescriptionA);
+    $projectDescription = implode( ", ", $projectDescriptionA);
 
 
 
@@ -301,11 +289,11 @@ empty(trim($_POST["projectTask3"]))){
     $projectTaskA[] = $_POST['projectTask1'];
     if (isset($_POST['projectTask2'])) {
       $projectTaskA[] = $_POST['projectTask2'];
-    }elseif (isset($_POST['projectTask3'])) {
+    }if (isset($_POST['projectTask3'])) {
     $projectTaskA[] = $_POST['projectTask3'];
     }
 
-    $projectTask = implode( "; ", $projectTaskA);
+    $projectTask = implode( ", ", $projectTaskA);
 
   }
 
@@ -515,7 +503,7 @@ else {
 if(empty($orgName_err) && empty ($contact_err) && empty ($address_err)
 && empty ($phone_err) && empty ($email_err) && empty ($website_err)
 && empty ($logoConsent_err) && empty ($orgPurpose_err)
-&& empty ($orgYear_err) && empty ($orgEmployee_err) && empty ($approved_err) && empty ($theme_err)
+&& empty ($orgYear_err) && empty ($orgEmployee_err) && empty ($theme_err)
 && empty ($projectScale_err) && empty ($projectTitle_err)
 && empty ($projectDescription_err1) && empty ($projectDescription_err2) && empty ($projectDescription_err3) && empty ($projectDescription_err4)
 && empty ($projectDescription_err5) && empty ($projectTask_err)
@@ -529,6 +517,8 @@ if(empty($orgName_err) && empty ($contact_err) && empty ($address_err)
 // include 'includes/library.php';
 //   $pdo = & dbconnect();
 
+    $approved == "0";
+
 
   //add account details to database
     $sql="INSERT into projectForm (id, orgName, contact, address, phone, email,
@@ -539,7 +529,7 @@ if(empty($orgName_err) && empty ($contact_err) && empty ($address_err)
 
       if($stmt = mysqli_prepare($link,$sql)){
 
-        $id = null;
+
         //BInd parameters
         mysqli_stmt_bind_param($stmt, "isssssssssssssssssssssssssssss",$id, $orgName, $contact, $address, $phone, $email,
           $website, 	$logoConsent, $orgPurpose, $orgYear, $orgEmployee, $approved, $theme,
@@ -724,11 +714,9 @@ mysqli_close($link);
     </div>
 
 
-    <div>
-      <label for="approved">d)	Has your immediate supervisor or board approved this application? If necessary, please provide a name and contact information.</label>
-      <input type="text" name="approved" id="approved" value="<?php echo $approved; ?>">
-      <span class="help-block"><?php echo $approved_err; ?></span>
-    </div>
+
+
+
 
 
 

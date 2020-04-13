@@ -2,6 +2,13 @@
 // Initialize the session
 session_start();
 
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
 $studentArray = array();
 $counter = 0;
 
@@ -59,7 +66,7 @@ if($result = $link -> query($sql)){
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -73,7 +80,14 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title"> Students</h3>
+              <button onclick = "location = 'addstudent.php';" class='btn btn-secondary'>Add new student</button>
+              <?php include 'addlink.php';?>
+              <?php include 'removelink.php';?>
+              <?php include 'departmentControl.php';?>
+              <?php include 'regionControl.php';?>
+              <?php include 'institutionControl.php';?>
+              <?php include 'studentskillsControl.php';?>
+              <?php include 'researchThemeControl.php';?>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -91,7 +105,7 @@ if($result = $link -> query($sql)){
                 </thead>
                 <tbody>
                   <?php
-                  for($i = 0; $i < $counter; $i++){
+                  for($i = 0; $i < count($studentArray); $i++){
                   ?>
                   <tr>
                   <?php
@@ -100,11 +114,11 @@ if($result = $link -> query($sql)){
                     //Button to be replaced with an Icon. for now, color is changed for visibility
                     echo "<td><a href='studentprofile.php?id={$studentArray[$i]['0']}' style='color:red'>View</a></td>";
                     echo "<td><a href='search.php?id={$studentArray[$i]['0']}'>{$studentArray[$i]['0']}</a></td>";
-                    echo "<td><a href='search.php?firstName={$studentArray[$i]['1']}'>{$studentArray[$i]['1']}</a></td>";
-                    echo "<td><a href='search.php?lastName={$studentArray[$i]['2']}'>{$studentArray[$i]['2']}</a></td>";
-                    echo "<td><a href='search.php?studentNumber={$studentArray[$i]['3']}'>{$studentArray[$i]['3']}</a></td>";
-                    echo "<td><a href='search.php?email={$studentArray[$i]['4']}'>{$studentArray[$i]['4']}</a></td>";
-                    echo "<td><a href='search.php?major={$studentArray[$i]['12']}'>{$studentArray[$i]['12']}</a></td>";
+                    echo "<td><a href='search.php?all={$studentArray[$i]['1']}'>{$studentArray[$i]['1']}</a></td>";
+                    echo "<td><a href='search.php?all={$studentArray[$i]['2']}'>{$studentArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?studentID={$studentArray[$i]['3']}'>{$studentArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?all={$studentArray[$i]['4']}'>{$studentArray[$i]['4']}</a></td>";
+                    echo "<td>{$studentArray[$i]['12']}</td>";
                     ?>
                   </tr>
                   <?php

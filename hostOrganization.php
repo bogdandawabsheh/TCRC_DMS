@@ -2,9 +2,21 @@
 // Initialize the session
 session_start();
 
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+
+//Access control
+include 'includes/accesscontrol.php';
+
+//Initializing Variables
 $projectArray = array();
 $counter = 0;
 
+//database connection
 require_once "config.php";
 //Retrieve the list of currently approved but not yet begun projects
 $sql = "SELECT * FROM hostOrganization";
@@ -56,7 +68,7 @@ if($result = $link -> query($sql)){
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">DataTables</li>
             </ol>
           </div>
@@ -70,13 +82,21 @@ if($result = $link -> query($sql)){
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">Host Organization Data Table</h3>
+              <button onclick = "location = 'addhost.php';" class='btn btn-secondary'>Add new host</button>
+              <?php include 'addlink.php';?>
+              <?php include 'removelink.php';?>
+              <?php include 'departmentControl.php';?>
+              <?php include 'regionControl.php';?>
+              <?php include 'institutionControl.php';?>
+              <?php include 'studentskillsControl.php';?>
+              <?php include 'researchThemeControl.php';?>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
               <table id="example1" class="table table-bordered table-hover">
                 <thead>
                 <tr>
+                  <th>View</th>
                   <th>id</th>
                   <th>orgName</th>
                   <th>orgType</th>
@@ -90,15 +110,18 @@ if($result = $link -> query($sql)){
                 </thead>
                 <tbody>
                   <?php
-                  for($i = 0; $i < $counter; $i++){
+                  for($i = 0; $i < count($projectArray); $i++){
                   ?>
                   <tr>
                   <?php
-                    echo "<td>{$projectArray[$i]['0']}</td>";
-                    echo "<td>{$projectArray[$i]['1']}</td>";
-                    echo "<td>{$projectArray[$i]['2']}</td>";
-                    echo "<td>{$projectArray[$i]['3']}</td>";
-                    echo "<td>{$projectArray[$i]['4']}</td>";
+
+                    //Print out the contents of the table in loop
+                    echo "<td><a href='hostprofile.php?id={$projectArray[$i]['0']}' style='color:red'>View</a></td>";
+                    echo "<td><a href='search.php?id={$projectArray[$i]['0']}'>{$projectArray[$i]['0']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['1']}'>{$projectArray[$i]['1']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['2']}'>{$projectArray[$i]['2']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['3']}'>{$projectArray[$i]['3']}</a></td>";
+                    echo "<td><a href='search.php?all={$projectArray[$i]['4']}'>{$projectArray[$i]['4']}</a></td>";
                     echo "<td>{$projectArray[$i]['5']}</td>";
                     echo "<td>{$projectArray[$i]['6']}</td>";
                     echo "<td>{$projectArray[$i]['7']}</td>";
@@ -111,6 +134,7 @@ if($result = $link -> query($sql)){
                 </tbody>
                 <tfoot>
                 <tr>
+                  <th>View</th>
                   <th>id</th>
                   <th>orgName</th>
                   <th>orgType</th>

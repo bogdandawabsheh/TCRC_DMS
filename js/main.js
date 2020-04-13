@@ -13,10 +13,10 @@
             else {
                 $(this).removeClass('has-val');
             }
-        })    
+        })
     })
-  
-  
+
+
     /*==================================================================
     [ Validate ]*/
     var input = $('.validate-input .input100');
@@ -65,7 +65,7 @@
 
         $(thisAlert).removeClass('alert-validate');
     }
-    
+
     /*==================================================================
     [ Show pass ]*/
     var showPass = 0;
@@ -80,8 +80,18 @@
             $(this).removeClass('active');
             showPass = 0;
         }
-        
+
     });
 
-
+    var searchEntry;
+    $('search').on('click', function(){
+        if($(this).value == 0) {
+            searchEntry = 0;
+        }
+        else {
+          searchEntry = 0;
+        }
+        $(document).replace("search.php?id=1");
+    });
+    /*=Search on click=*/
 })(jQuery);

@@ -2,17 +2,22 @@
 // Initialize the session
 session_start();
 
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
 //Remove error reportings
-$tableStudent = "";
-$tableProject = "";
-$tableFaculty = "";
-$tableContact = "";
-$tableHost = "";
+$tableStudent = $tableProject = $tableFaculty = $tableContact = $tableHost = array();
+
 $counter = 0;
 $variableType = $requestedQuery = "";
 
 //CHECK GET. Redirect if no get is set, or session is absent
 if(isset($_GET["id"])){
+  //Filter get
   $requestedID = filter_var($_GET["id"],FILTER_SANITIZE_STRING);
   $_SESSION["requestedVariable"] = $requestedID;
   $_SESSION["variableType"] = "id";
@@ -42,16 +47,17 @@ if(isset($_GET["id"])){
   $_SESSION["variableType"] = "email";
 }else if (isset($_GET["all"])){
   $requestedID = filter_var($_GET['all'],FILTER_SANITIZE_STRING);
-  $_SESSION["requestedVariable"] = $requestedQuery;
+  $_SESSION["requestedVariable"] = $requestedID;
   $_SESSION["variableType"] = "all";
 }
 else if (isset($_SESSION["requestedQuery"])){
   $requestedQuery = $_SESSION["requestedQuery"];
   $variableType = $_SESSION["variableType"];
 } else {
-  $message = "No GET/POST found. Ensure you are accessing correctly.";
-  echo "<script type='text/javascript'>alert('$message');</script>";
-  header("location: index1.php");
+  $_SESSION["requestedQuery"] = "";
+  $_SESSION["variableType"] = "";
+  $requestedQuery = "";
+  $variableType = "";
 }
 
 //Import the database connector
@@ -59,55 +65,65 @@ require_once "config.php";
 
 //If the search begins with an id, search all datatables by ID
 if($_SESSION['variableType'] == 'id'){
+  //get all contents from the student table
   $sql = "SELECT * FROM student WHERE id = ".$_SESSION['requestedVariable'];
 
     if($tableStudent = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at execution";
+
+    //echo "Error at execution";
     }
 
+//get all contents from the projects table
   $sql = "SELECT * FROM project WHERE id = ".$_SESSION['requestedVariable'];
 
       if($tableProject = mysqli_query($link,$sql)){
         //success
       } else {
-        echo "Error at execution";
-      }
 
+      //echo "Error at execution";
+      }
+      //get all from faculty table
       $sql = "SELECT * FROM faculty WHERE id = ".$_SESSION['requestedVariable'];
 
         if($tableFaculty = mysqli_query($link,$sql)){
           //success
         } else {
-          echo "Error at execution";
+
+        //echo "Error at execution";
         }
 
+      //get contents of the contact table
       $sql = "SELECT contact.id, contact.firstName, contact.lastName, contact.workEmail, contact.workPhone, contact.contactType, contactInfo.address1, contactInfo.city, contactInfo.province, contactInfo.pcode FROM contact LEFT JOIN contactInfo ON contact.id = contactInfo.contactID WHERE contact.id = ".$_SESSION['requestedVariable'];
 
     if($tableContact = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at execution";
+
+    //echo "Error at execution";
     }
 
+    //get the contents of the host table
       $sql = "SELECT * FROM hostOrganization LEFT JOIN hostAddress ON hostOrganization.id = hostAddress.organizationID WHERE hostOrganization.id = ".$_SESSION['requestedVariable'];
 
         if($tableHost = mysqli_query($link,$sql)){
           //success
         } else {
-          echo "Error at execution";
+
+        //echo "Error at execution";
         }
 
 //if the search begins with studentID, search by student ID
 }else if($_SESSION['variableType'] == 'email'){
-  echo $_SESSION['requestedVariable'];
+  //echo $_SESSION['requestedVariable'];
   $sql = "SELECT * FROM student WHERE email = '".$_SESSION['requestedVariable']."'";
 
     if($tableStudent = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at student";
+
+    //echo "Error at execution";
     }
 
 
@@ -116,7 +132,8 @@ if($_SESSION['variableType'] == 'id'){
         if($tableFaculty = mysqli_query($link,$sql)){
           //success
         } else {
-          echo "Error at faculty";
+
+        //echo "Error at execution";
         }
 
       $sql = "SELECT contact.id, contact.firstName, contact.lastName, contact.workEmail, contact.workPhone, contact.contactType, contactInfo.address1, contactInfo.city, contactInfo.province, contactInfo.pcode FROM contact LEFT JOIN contactInfo ON contact.id = contactInfo.contactID WHERE contact.workEmail = ".$_SESSION['requestedVariable'];
@@ -124,7 +141,8 @@ if($_SESSION['variableType'] == 'id'){
     if($tableContact = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at contact";
+
+    //echo "Error at execution";
     }
 
       $sql = "SELECT * FROM hostOrganization LEFT JOIN hostAddress ON hostOrganization.id = hostAddress.id WHERE hostOrganization.email1 = ".$_SESSION['requestedVariable'];
@@ -132,17 +150,20 @@ if($_SESSION['variableType'] == 'id'){
         if($tableHost = mysqli_query($link,$sql)){
           //success
         } else {
-          echo "Error at host";
+
+        //echo "Error at execution";
         }
 
 //if the search begins with studentID, search by student ID
 } else if ($_SESSION['variableType'] == 'studentID'){
-  $sql = "SELECT * FROM student WHERE id = ".$_SESSION['requestedVariable'];
+  $sql = "SELECT * FROM student WHERE studentNum = ".$_SESSION['requestedVariable'];
 
     if($tableStudent = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at execution";
+      //Empty table
+
+      //echo "Error at execution";
     }
 //if the search begins with projectId, search by project ID inside project
 }else if ($_SESSION['variableType'] == 'projectID'){
@@ -151,7 +172,9 @@ if($_SESSION['variableType'] == 'id'){
     if($tableProject = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at execution";
+      //Empty table
+
+      //echo "Error at execution";
     }
 //if the search begins with departmentCode/deparmentID, search by dept ID inside project, department
 }else if ($_SESSION['variableType'] == 'orgID'){
@@ -160,7 +183,9 @@ if($_SESSION['variableType'] == 'id'){
     if($tableHost = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at execution";
+      //Empty table
+
+      //echo "Error at execution";
     }
 //if the search begins with email, search by email  inside all datatables
 }else if ($_SESSION['variableType'] == 'facultyID'){
@@ -169,7 +194,9 @@ if($_SESSION['variableType'] == 'id'){
     if($tableFaculty = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at execution";
+      //Empty table
+
+      //echo "Error at execution";
     }
 //if the search begins with projectId, search by project ID inside project
 }else if ($_SESSION['variableType'] == 'contactID'){
@@ -178,78 +205,91 @@ if($_SESSION['variableType'] == 'id'){
     if($tableContact = mysqli_query($link,$sql)){
       //success
     } else {
-      echo "Error at execution";
+      //Empty table
+
+      //echo "Error at execution";
     }
 //if the search begins with projectId, search by project ID inside project
 }else if($_SESSION['variableType'] == 'all'){
-  //Search every single datatable for that entry (except the login stuff of course)
-    $sql = "SELECT * FROM student WHERE firstName = '".$_SESSION['requestedVariable']."'";
-  //$sql = "SELECT * FROM student WHERE id LIKE '%''".$_SESSION['requestedVariable'].%'
-    //                            OR firstName LIKE '%''".$_SESSION['requestedVariable']."''%'
-      //                          OR lastName LIKE '%''".$_SESSION['requestedVariable']."''%'
-        //                        OR studentNum LIKE '%''".$_SESSION['requestedVariable']."''%'
-          //                      OR email LIKE '%''".$_SESSION['requestedVariable']."''%'
-            //                    ";
+   if(strlen($_SESSION['requestedVariable']) != 0){
 
-    if($tableStudent = mysqli_query($link,$sql)){
-      //success
-    } else {
-      echo "Error at student";
-    }
+    //Search every single datatable for that entry (except the login stuff of course)
+      $sql = "SELECT * FROM student WHERE id LIKE '%".$_SESSION['requestedVariable']."%'
+                                  OR firstName LIKE '%".$_SESSION['requestedVariable']."%'
+                                 OR lastName LIKE '%".$_SESSION['requestedVariable']."%'
+                                  OR studentNum LIKE '%".$_SESSION['requestedVariable']."%'
+                                  OR email LIKE '%".$_SESSION['requestedVariable']."%'"
+                                  ;
 
-    $sql = "SELECT * FROM project WHERE id LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR projectTitle LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR projectNumber LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR staffCode LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR status LIKE '%".$_SESSION['requestedVariable']."%'
-                                  ";
-      if($tableProject = mysqli_query($link,$sql)){
+      if($tableStudent = mysqli_query($link,$sql)){
         //success
       } else {
-        echo "Error at project";
+
+      //echo "Error at execution";
       }
 
-      $sql = "SELECT * FROM faculty WHERE id LIKE '%".$_SESSION['requestedVariable']."%'
-                                    OR firstName LIKE '%".$_SESSION['requestedVariable']."%'
-                                    OR lastName LIKE '%".$_SESSION['requestedVariable']."%'
-                                    OR email LIKE '%".$_SESSION['requestedVariable']."%'
-                                    ";
-        if($tableFaculty = mysqli_query($link,$sql)){
+      $sql = "SELECT * FROM project WHERE id LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR projectTitle LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR projectNumber LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR staffCode LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR status LIKE '%".$_SESSION['requestedVariable']."%'"
+                                    ;
+
+        if($tableProject = mysqli_query($link,$sql)){
           //success
         } else {
-          echo "Error at faculty";
+
+        //echo "Error at execution";
         }
 
-        $sql = "SELECT * FROM contact INNER JOIN contactInfo WHERE contact.id LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contact.firstName LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contact.lastName LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contact.workEmail LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contact.workPhone LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contact.contactType LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contactInfo.address1 LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contactInfo.city LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contactInfo.province LIKE '%".$_SESSION['requestedVariable']."%'
-                                      OR contactInfo.pcode LIKE '%".$_SESSION['requestedVariable']."%'
+        $sql = "SELECT * FROM faculty WHERE id LIKE '%".$_SESSION['requestedVariable']."%'
+                                      OR firstName LIKE '%".$_SESSION['requestedVariable']."%'
+                                      OR lastName LIKE '%".$_SESSION['requestedVariable']."%'
+                                      OR email LIKE '%".$_SESSION['requestedVariable']."%'
                                       ";
-    if($tableContact = mysqli_query($link,$sql)){
-      //success
-    } else {
-      echo "Error at contact";
-    }
-    $sql = "SELECT * FROM hostOrganization INNER JOIN hostAddress WHERE hostOrganization.id LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR hostOrganization.orgName LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR hostOrganization.orgType LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR hostOrganization.hostClass LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR hostAddress.address LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR hostAddress.phone1 LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR hostAddress.email1 LIKE '%".$_SESSION['requestedVariable']."%'
-                                  OR hostAddress.website LIKE '%".$_SESSION['requestedVariable']."%'
-                                  ";
-        if($tableHost = mysqli_query($link,$sql)){
-          //success
-        } else {
-          echo "Error at execution";
-        }
+          if($tableFaculty = mysqli_query($link,$sql)){
+            //success
+          } else {
+
+          //echo "Error at execution";
+          }
+
+          $sql = "SELECT * FROM contact INNER JOIN contactInfo ON contact.id = contactInfo.contactID WHERE contact.id LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contact.firstName LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contact.lastName LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contact.workEmail LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contact.workPhone LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contact.contactType LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contactInfo.address1 LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contactInfo.city LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contactInfo.province LIKE '%".$_SESSION['requestedVariable']."%'
+                                        OR contactInfo.pcode LIKE '%".$_SESSION['requestedVariable']."%'
+                                        ";
+      if($tableContact = mysqli_query($link,$sql)){
+        //success
+      } else {
+
+      //echo "Error at execution";
+      }
+      $sql = "SELECT * FROM hostOrganization INNER JOIN hostAddress ON hostOrganization.id = hostAddress.organizationID WHERE hostOrganization.id LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR hostOrganization.orgName LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR hostOrganization.orgType LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR hostOrganization.hostClass LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR hostAddress.address LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR hostAddress.phone1 LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR hostAddress.email1 LIKE '%".$_SESSION['requestedVariable']."%'
+                                    OR hostAddress.website LIKE '%".$_SESSION['requestedVariable']."%'
+                                    ";
+          if($tableHost = mysqli_query($link,$sql)){
+            //success
+          } else {
+
+          //echo "Error at execution";
+          }
+
+   }
+ } else {
+  //do nothing
 }
 
  ?>
@@ -272,6 +312,7 @@ if($_SESSION['variableType'] == 'id'){
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <!-- Filtering JS File -->
 
 
 
@@ -296,7 +337,7 @@ if($_SESSION['variableType'] == 'id'){
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="index1.php">Home</a></li>
+              <li class="breadcrumb-item"><a href="index.php">Home</a></li>
               <li class="breadcrumb-item active">Search</li>
             </ol>
           </div>
@@ -309,39 +350,40 @@ if($_SESSION['variableType'] == 'id'){
 		<div class="col-md-10">
 			<div class="row">
 				<div class="col-sm-12">
-          <input type="text" name="major" class="form-control" placeholder="Select filters and enter your search query:">
+          <input type="text" id ="txtSearch" name="major" class="form-control"  placeholder="Select filters and enter your search query:"></input>
         </div>
 			</div>
-			<div class="row">
+			<div class="row" >
 				<div class="col-sm-2">
-          <input type="checkbox" id="cbAll" class="check" value="all" onclick="checkAll()"> All</input>
+          <input type="checkbox" id="cbAll" class="check" value="all" checked onclick="checkAll()"> All</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" id="cbProject" class="check" value="project" onclick="checkProject()"> Project</input>
+          <input type="checkbox" id="cbProject" class="check" value="project" checked onclick="checkProject()"> Project</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" id="cbStudent" class="check" value="student" onclick="checkStudent()"> Student</input>
+          <input type="checkbox" id="cbStudent" class="check" value="student" checked onclick="checkStudent()"> Student</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" id="cbFaculty" class="check" value="faculty" onclick="checkFaculty()"> Faculty</input>
+          <input type="checkbox" id="cbFaculty" class="check" value="faculty" checked onclick="checkFaculty()"> Faculty</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" id="cbContact" class="check" value="contact" onclick="checkContacts()" > Contacts</input>
+          <input type="checkbox" id="cbContact" class="check" value="contact" checked onclick="checkContacts()" > Contacts</input>
         </div>
         <div class="col-sm-2">
-          <input type="checkbox" id="cbHost" class="check" value="hostOrg" onclick="checkHost()" > Host Organizations</input>
+          <input type="checkbox" id="cbHost" class="check" value="hostOrg" checked onclick="checkHost()" > Host Organizations</input>
 				</div>
 			</div>
 		</div>
 		<div class="col-sm-2">
 			<div class="row">
 				<div class="col-lg-6">
-					<button type="button" class="btn btn-primary">
-						Search
+					<button type="button" id="btnSearch" onclick="search()"  class="btn btn-primary">
+
+            Search
 					</button>
 				</div>
 				<div class="col-lg-6">
-					<button type="button" class="btn btn-secondary btn-sm">
+					<button type="button" id="btnReset" onclick="reset()" class="btn btn-secondary btn-sm">
 						Reset
 					</button>
 				</div>
@@ -349,7 +391,6 @@ if($_SESSION['variableType'] == 'id'){
 		</div>
 	</div>
 </div><!-- /.container-fluid -->
-    </section>
 
           <!-- Main content -->
           <section class="content">
@@ -357,7 +398,7 @@ if($_SESSION['variableType'] == 'id'){
                 <div id="student" class="col-6">
                   <div class="card">
                     <div class="card-header">
-                      <h3 class="card-title">Student search (<?php if(is_a($tableStudent,"mysqli_result")) echo mysqli_num_rows($tableStudent)?> results)</h3>
+                      <h3 class="card-title">Student search (<?php if(is_a($tableStudent,"mysqli_result")) echo mysqli_num_rows($tableStudent); else echo 0;?> results)</h3>
                     </div>
                   </div>
                   <div class="card-body">
@@ -562,9 +603,6 @@ if($_SESSION['variableType'] == 'id'){
       <script src="dist/js/adminlte.min.js"></script>
       <!-- AdminLTE for demo purposes -->
       <script src="dist/js/demo.js"></script>
-      <!-- Filtering JS File -->
-  <!--    <script src="js/search.js"></script> -->
-
       <script>
         $(function () {
           $(".example1").DataTable({
@@ -582,106 +620,8 @@ if($_SESSION['variableType'] == 'id'){
         });
       </script>
 
-
-
-
-  <!-- Filtering Script -->
-
-<script>
-
-//check if student box is checked
-function checkStudent() {
-
-  var checkbox = document.getElementById("cbStudent");
-  var content = document.getElementById("student");
-
-  if (checkbox.checked == true) {
-     content.style.display = "block";
-   } else {
-     content.style.display = "none";
-   }
-}
-
-//check if project box is checked
-function checkProject() {
-  var checkbox = document.getElementById("cbProject");
-  var content = document.getElementById("project");
-
-  if (checkbox.checked == true) {
-     content.style.display = "block";
-   } else {
-     content.style.display = "none";
-   }
-}
-
-
-//check if faculty box is checked
-function checkFaculty() {
-  var checkbox = document.getElementById("cbFaculty");
-  var content = document.getElementById("faculty");
-
-  if (checkbox.checked == true) {
-     content.style.display = "block";
-   } else {
-     content.style.display = "none";
-   }
-}
-
-//check if host box is checked
-function checkHost() {
-  var checkbox = document.getElementById("cbHost");
-  var content = document.getElementById("host");
-
-  if (checkbox.checked == true) {
-     content.style.display = "block";
-   } else {
-     content.style.display = "none";
-   }
-}
-
-//check if contacts box is checked
-function checkContacts() {
-  var checkbox = document.getElementById("cbContact");
-  var content = document.getElementById("contact");
-
-  if (checkbox.checked == true) {
-     content.style.display = "block";
-   } else {
-     content.style.display = "none";
-   }
-}
-
-//check if the "all" box is checked
-function checkAll() {
-  var checkbox = document.getElementById("cbAll");
-  var box1 = document.getElementById("cbProject");
-  var box2 = document.getElementById("cbStudent");
-  var box3 = document.getElementById("cbFaculty");
-  var box4 = document.getElementById("cbContact");
-  var box5 = document.getElementById("cbHost");
-
-  if (checkbox.checked == true) {
-     box1.checked = true;
-     box2.checked = true;
-     box3.checked = true;
-     box4.checked = true;
-     box5.checked = true;
-     checkProject();
-     checkStudent();
-     checkFaculty();
-     checkContacts();
-     checkHost();
-   } else {
-     checkProject();
-     checkStudent();
-     checkFaculty();
-     checkContacts();
-     checkHost();
-   }
-}
-
-</script>
-
-
     </body>
+
   </html>
+
+  <?php echo '<script type="text/javascript">filterController();</script>';?>

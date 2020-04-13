@@ -2,6 +2,15 @@
 // Initialize the session
 session_start();
 
+
+// Check if the user is logged in, if not then redirect him to login page
+if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true){
+    header("location: login.php");
+    exit;
+}
+include 'includes/accesscontrol.php';
+
+
 //Remove error reporting
 error_reporting(0);
 // Define variables and initialize with empty values
@@ -42,7 +51,7 @@ elseif (isset($_SESSION["id"])){
 } else {
   $message = "No GET/POST found. Ensure you are accessing correctly.";
   echo "<script type='text/javascript'>alert('$message');</script>";
-  header("location: index1.php");
+  header("location: index.php");
 }
 
 if($_SERVER["REQUEST_METHOD"] == "POST"){
