@@ -93,7 +93,7 @@ if (isset($_POST['upload'])){
   $file_type = $_FILES['file']['type'];
   $file_size = $_FILES['file']['size'];
   $file_temp_loc = $_FILES['file']['tmp_name'];
-  $file_store = "/home/apollosoftware/public_html/www_data/".$file_name;
+  $file_store = "../../../public_html/www_data/".$file_name;
 
  if( move_uploaded_file($file_temp_loc, $file_store))
  echo 'Template Upload Sucess';
