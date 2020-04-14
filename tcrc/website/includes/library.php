@@ -19,7 +19,7 @@ function & dbconnect(){
 
     //make database object
     try {
-        $pdo = new PDO($dsn, "apollosoftware", "cois4000Y", $options);
+        $pdo = new PDO($dsn, "", "", $options); //dsn,username,password,options
     } catch (\PDOException $e) {
          throw new \PDOException($e->getMessage(), (int)$e->getCode());
     }

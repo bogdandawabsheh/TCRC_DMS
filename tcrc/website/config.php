@@ -2,8 +2,8 @@
 /* Database credentials. running MySQL*/
 
 define('DB_SERVER', 'localhost');
-define('DB_USERNAME', 'apollosoftware');
-define('DB_PASSWORD', 'cois4000Y');
+define('DB_USERNAME', '');
+define('DB_PASSWORD', '');
 define('DB_NAME', 'apollosoftware');
 
 /* Attempt to connect to MySQL database */
