@@ -145,7 +145,7 @@ if($result = $link -> query($sql)){
   </br>
   <center>
 <?php
-$dirpath= "/home/apollosoftware/public_html/www_data/";
+$dirpath= "../../../public_html/www_data/";
 $filenames = array();
 if(is_dir($dirpath))
 {
